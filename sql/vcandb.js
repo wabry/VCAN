@@ -210,6 +210,18 @@ class dbaccess{
                 let sql = "delete from filed where appID in (select ID from applications where name like ?) and folderID = ?";
                 return this.asyncrun(sql, [name, folderID]);
         };
+
+	renameFolderByName(oldname, newname)
+        {
+                let sql = "update folders set name = ? where name like ? and static is null";
+                return this.asyncrun(sql, [oldname, newname]);
+        };
+
+	renameFolderByID(id, name)
+        {
+                let sql = "update folders set name = ? where ID = ? and static is null";
+                return this.asyncrun(sql, [id, name]);
+        };
 };	
 //function print(thing)
 //{

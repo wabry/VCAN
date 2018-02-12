@@ -7,7 +7,7 @@ CREATE TABLE folders(
 	favorited INTEGER,
 	static integer,
 	PRIMARY KEY(ID),
-	CONSTRAINT foldernames UNIQUE(name,parentID),
+	CONSTRAINT foldernames UNIQUE(name),
 	FOREIGN KEY(parentID) REFERENCES folders(ID) ON DELETE CASCADE DEFERRABLE INITIALLY DEFERRED
 );
 
@@ -16,6 +16,7 @@ CREATE TABLE applications(
 	name VARCHAR(40) NOT NULL,
 	description VARCHAR(1024),
 	favorited INTEGER,
+	CONSTRAINT appnames UNIQUE(name),
 	PRIMARY KEY(ID)
 );
 
@@ -24,6 +25,7 @@ CREATE TABLE filed(
 	appID INTEGER NOT NULL,
 	PRIMARY KEY (folderID, appID),
 	FOREIGN KEY (folderID) REFERENCES folders(ID) ON DELETE CASCADE,
-	FOREIGN KEY (appID) REFERENCES applications(ID) ON DELETE CASCADE
+	FOREIGN KEY (appID) REFERENCES applications(ID) ON DELETE CASCADE,
+	CONSTRAINT singlefiled UNIQUE(appID)
 );
 

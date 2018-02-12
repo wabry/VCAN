@@ -129,13 +129,13 @@ class dbaccess{
 
 	moveFolderByID(id, newparentID)
 	{
-		let sql = "update folders set parentID = ? where id = ?";
+		let sql = "update folders set parentID = ? where id = ? and static is null";
 		return this.asyncrun(sql, [newparentID, id]);
 	};
 
 	moveFolderByName(name, oldparentID, newparentID)
         {
-                let sql = "update folders set parentID = ? where parentID = ? and name like ?";
+                let sql = "update folders set parentID = ? where parentID = ? and name like ? and static is null";
                 return this.asyncrun(sql, [newparentID, oldparentID, name]);
         };
 

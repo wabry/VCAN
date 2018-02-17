@@ -103,7 +103,7 @@ class dbaccess{
                 return this.getAsync(sql);
         };
 
-	createFolder(name, parentID )
+	createFolder(name, parentID)
 	{
 		let sql= "INSERT INTO folders(name, parentID) VALUES(?,?)";
 		return this.asyncrun(sql, [name, parentID]);

@@ -1,0 +1,12 @@
+<!doctype html>
+<h1>Current Path: "{{dir}}"</h1>
+<body>
+	<h2> Apps </h2>
+	{{#each app}}
+    	<div class="row"> {{this}} </div>
+	{{/each}}
+	<h2> Folders </h2>
+	{{#each folder}}
+    	<div class="row"> {{this}} </div>
+	{{/each}}
+</body>

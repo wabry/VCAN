@@ -1,27 +1,29 @@
 // This file controls the current state of the file system at any given time
 // TODO - Add exceptions/error handling
+// TODO - Add functionality for path and folder
 var dbWrapper = require('./dbWrapper'); // Add to interact with the database
 
 var stateModule = (function() {
     // State of transactions
     var log = [];
     // State of the filesystem
-    var parentFolder = '';     // Current parent directory, initialized to nothing
-    var currentFolder = '/';   // Current directory, initialized to root
-    var folders = [];       // Folders in current directory
-    var apps = [];          // Apps in current directory
+    var path = '~';               // Current path of the system
+    var parentFolder = '';        // Current parent directory, initialized to nothing
+    var currentFolder = 'root';   // Current directory, initialized to root, has no parent
+    var folders = [];             // Folders in current directory
+    var apps = [];                // Apps in current directory
 
     var pub = {};   // public object - returned at end of module
 
     /***** Log Functionality *****/
-    pub.appendToLog = function (action) {
-        log.unshift(action);
+    pub.appendToLog = function (time,action) {
+        log.unshift(time + ' --- ' + action);
     };
     pub.getLog = function() {
         return log;
     };
     pub.getPath = function (action) {
-        return currentFolder;
+        return path;
     };
     /***** App Functionality  ******/
     // Add the app to the app list
@@ -30,15 +32,6 @@ var stateModule = (function() {
         apps.push(appName);
         // Add the app to the database
         dbWrapper.addApp(appName,currentFolder);
-        // Return the list of apps
-        return apps;
-    };
-    // Move the app
-    pub.moveApp = function (appName, destFolder) {
-        // Remove the folder from the list and db
-        removeApp(appName);
-        // Add the folder to the right place in the db
-        dbWrapper.addApp(appName,destFolder);
         // Return the list of apps
         return apps;
     };
@@ -57,6 +50,15 @@ var stateModule = (function() {
         // Return the list of apps
         return apps;
     };
+    // Move the app
+    pub.moveApp = function (appName, destFolder) {
+        // Remove the folder from the list and db
+        pub.removeApp(appName);
+        // Add the folder to the right place in the db
+        dbWrapper.addApp(appName,destFolder);
+        // Return the list of apps
+        return apps;
+    };
     // Get all apps from the app list
     pub.getApps = function() {
         return apps;
@@ -72,15 +74,6 @@ var stateModule = (function() {
         // Return the list of folders
         return folders;
     };
-    // Move the folder
-    pub.moveFolder = function (folderName, destFolder) {
-        // Remove the folder from the list and db
-        removeFolder(folderName);
-        // Add the folder to the right place in the db
-        dbWrapper.addFolder(folderName,destFolder);
-        // Return the list of folders
-        return folders;
-    };
     // Remove an folder from the folder list
     pub.removeFolder = function (folderName) {
         // Find the folder to delete, and delete if found
@@ -93,6 +86,15 @@ var stateModule = (function() {
         }
         // Delete the folder from the database
         dbWrapper.removeFolder(folderName,currentFolder);
+        // Return the list of folders
+        return folders;
+    };
+    // Move the folder
+    pub.moveFolder = function (folderName, destFolder) {
+        // Remove the folder from the list and db
+        pub.removeFolder(folderName);
+        // Add the folder to the right place in the db
+        dbWrapper.addFolder(folderName,destFolder);
         // Return the list of folders
         return folders;
     };
@@ -114,6 +116,7 @@ var stateModule = (function() {
             // Update the current and parent folders
             currentFolder = parentFolder;
             parentFolder = dbWrapper.getParent(currentFolder);
+            path = moveUpPath(path);
             // Update the folders and apps
             apps = dbWrapper.getApps(currentFolder);
             folders = dbWrapper.getFolders(currentFolder);
@@ -131,6 +134,7 @@ var stateModule = (function() {
             // Update the current and parent folders
             parentFolder = currentFolder;
             currentFolder = folderName;
+            path = moveDownPath(path,currentFolder);
             // Update the folders and apps
             apps = dbWrapper.getApps(currentFolder);
             folders = dbWrapper.getFolders(currentFolder);
@@ -147,6 +151,21 @@ function elementExists(arr,element) {
         if(element == arr[i]) { return true; }
     }
     return false;
+}
+
+// Returns an updated path, moving up one folder
+function moveUpPath(path) {
+    var lastFolder;
+    for(var i=0; i<path.length; i++)
+    {
+        if(path[i] == '/') { lastFolder = i; }
+    }
+    return path.slice(0,lastFolder);
+}
+
+// Returns an updated path, moving down one folder
+function moveDownPath(path, folder) {
+    return path.concat('/' + folder);
 }
 
 // Export the state module to other files

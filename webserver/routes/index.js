@@ -23,7 +23,7 @@ router.get('/folder/:search_word', function(req, res, next) {
 	var searchName = req.params.search_word;
 	var returnJSON = JSON.stringify(dbWrapper.searchFolder(searchName));
 	// Log transaction
-	state.stateModule.appendToLog('Search for folder ' + searchName);
+	state.stateModule.appendToLog(Date(),'Search for folder ' + searchName);
 	// Send back data
 	res.contentType('application/json');
 	res.send(returnJSON);
@@ -36,7 +36,7 @@ router.get('/app/:search_word', function(req, res, next) {
 	var searchName = req.params.search_word;
 	var returnJSON = JSON.stringify(dbWrapper.searchApp(searchName));
 	// Log transaction
-	state.stateModule.appendToLog('Search for app ' + searchName);
+	state.stateModule.appendToLog(Date(),'Search for app ' + searchName);
 	// Send back data
 	res.contentType('application/json');
 	res.send(returnJSON);
@@ -49,7 +49,7 @@ router.get('/search/:search_word', function(req, res, next) {
 	var searchName = req.params.search_word;
 	var returnJSON = JSON.stringify(dbWrapper.search(searchName));
 	// Log transaction
-	state.stateModule.appendToLog('Search for word ' + searchName);
+	state.stateModule.appendToLog(Date(),'Search for word ' + searchName);
 	// Send back data
 	res.contentType('application/json');
 	res.send(returnJSON);
@@ -62,7 +62,7 @@ router.post('/folder/:name', function(req, res, next) {
 	var folderName = req.params.name;
 	state.stateModule.addFolder(folderName);
 	// Log transaction
-	state.stateModule.appendToLog('Created folder ' + folderName);
+	state.stateModule.appendToLog(Date(),'Created folder ' + folderName);
 	res.end();
 });
 
@@ -73,7 +73,7 @@ router.post('/folder/move/:name&:destFolder', function(req, res, next) {
 	var destFolder = req.params.destFolder;
 	state.stateModule.moveFolder(folderName,destFolder);
 	// Log transaction
-	state.stateModule.appendToLog('Moved folder ' + appName + ' to folder ' + destFolder);
+	state.stateModule.appendToLog(Date(),'Moved folder ' + appName + ' to folder ' + destFolder);
 	res.end();
 });
 
@@ -83,7 +83,7 @@ router.delete('/folder/:name', function(req, res, next) {
 	var folderName = req.params.name;
 	state.stateModule.removeFolder(folderName);
 	// Log transaction
-	state.stateModule.appendToLog('Deleted folder ' + folderName);
+	state.stateModule.appendToLog(Date(),'Deleted folder ' + folderName);
 	res.end();
 });
 
@@ -93,7 +93,7 @@ router.post('/app/:name', function(req, res, next) {
 	var appName = req.params.name;
 	state.stateModule.addApp(appName);
 	// Log transaction
-	state.stateModule.appendToLog('Created app ' + appName);
+	state.stateModule.appendToLog(Date(),'Created app ' + appName);
 	res.end();
 });
 
@@ -104,7 +104,7 @@ router.post('/app/move/:name&:destFolder', function(req, res, next) {
 	var destFolder = req.params.destFolder;
 	state.stateModule.moveApp(appName,destFolder);
 	// Log transaction
-	state.stateModule.appendToLog('Moved app ' + appName + ' to folder ' + destFolder);
+	state.stateModule.appendToLog(Date(),'Moved app ' + appName + ' to folder ' + destFolder);
 	res.end();
 });
 
@@ -114,13 +114,13 @@ router.delete('/app/:name', function(req, res, next) {
 	var appName = req.params.name;
 	state.stateModule.removeApp(appName);
 	// Log transaction
-	state.stateModule.appendToLog('Deleted app ' + appName);
+	state.stateModule.appendToLog(Date(),'Deleted app ' + appName);
 	res.end();
 });
 
 /* Traverse through the filesystem */
 router.post('/traverse/:dest', function(req,res,next) {
-	// Go to the correct direction
+	// Go to the correct destination
 	var destination = req.params.dest;
 	if(destination == 'UP')
 	{
@@ -131,7 +131,7 @@ router.post('/traverse/:dest', function(req,res,next) {
 		state.stateModule.traverseDown(destination);
 	}
 	// Log transaction
-	state.stateModule.appendToLog('Traverse: ' + destination);
+	state.stateModule.appendToLog(Date(),'Traverse: ' + destination);
 	res.end();
 });
 

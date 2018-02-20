@@ -31,22 +31,21 @@ class dbWrapper {
         });
     };
 
-    static getApps (folder) {
+    static getApps (folder, callback) {
         // Gets all apps in a folder
         var apps = [];
         let db = this.connection();
         let sql = "select a.name from applications a join filed s on" +
-                  " a.ID == s.appID join folders f of f.ID == s.folderID" +
+                  " a.ID == s.appID join folders f on f.ID == s.folderID" +
                   " where f.name == ?";
-        this.getAsync(db, sql, [folder]).then((rows) => {apps = rows} );
-        return apps;
+        this.getAsync(db, sql, [folder]).then(callback(rows));
     }
     static addApp (app, folder) {
         // Adds the app to the folder
         let db = this.connection();
         let sql1 = "select id as fid from folders where name == ?";
         this.getAsync(db, sql1, [folder]).then ((rows1) => {
-            let fid = rows[0].fid;
+            let fid = rows1[0].fid;
             let sql2 = "select id as aid from applications where name == ?";
             this.getAsync(db, sql2, [app]).then ((rows2) => {
                 let aid = rows2[0].aid;
@@ -61,7 +60,7 @@ class dbWrapper {
         let db = this.connection();
         let sql1 = "select id as fid from folders where name == ?";
         this.getAsync(db, sql1, [folder]).then ((rows1) => {
-            let fid = rows[0].fid;
+            let fid = rows1[0].fid;
             let sql2 = "select id as aid from applications where name == ?";
             this.getAsync(db, sql2, [app]).then ((rows2) => {
                 let aid = rows2[0].aid;
@@ -71,17 +70,16 @@ class dbWrapper {
         });
     }
 
-    static getFolders (folder) {
+    static getFolders (folder, callback) {
         // Gets all folders in a folder
         var folders = [];
         let db = this.connection();
         let sql1 = "select ID as fid from folders where name == ?";
         this.getAsync(db, sql1, [folder]).then((rows1) => {
-            let fid = rows[0].fid;
+            let fid = rows1[0].fid;
             let sql2 = "select name from folders where parentID = ?";
-            this.getAsync(db, sql2 [fid]).then((rows2) => { folders = rows2});
+            this.getAsync(db, sql2 [fid]).then(callback(rows));
         });
-        return folders;
     }
 
     static addFolder (folderToAdd, folder) {
@@ -102,34 +100,36 @@ class dbWrapper {
         this.asyncRun(db, sql, [folderToRemove]);
     }
 
-    static getParent(folder) {
+    static getParent(folder, callback) {
         // Gets the parent folder of a folder
-        var parent ='';
         let db = this.connection();
         let sql1 = "select id as fid from folders where name == ?";
         this.getAsync(db,sql1, [folder]).then((rows) => {
             let fid = rows[0].fid;
             let sql2 = "select name from folders where id == ?";
-            this.getAsync(db, sql2, [fid]);
+            this.getAsync(db, sql2, [fid]).then(callback(rows));
         });
-        return parent;
     }
 
-    static search (searchName) {
+    static search (searchName, callback) {
     	// Searches the database for something with the name
         let db = this.connection();
         let sql = "(select name from folders where name == ?) union all (select name from applications where name == ?";
-        this.getAsync(db, sql, [searchName]);
+        this.getAsync(db, sql, [searchName]).then(callback(rows));
     }
 
-    static searchFolder (folderName) {
+    static searchFolder (folderName, callback) {
     	// Searches the database for the folderName
         let db = this.connection();
+        let sql = "select name from folders where name == ?";
+        this.getAsync(db, sql).thn(callback(rows));
     }
 
-    static searchApp (appName) {
+    static searchApp (appName, callback) {
     	// Searches the database for the appName
         let db = this.connection();
+        let sql = "select name from apps where name == ?";
+        this.getAsync(db, sql).then(callback(rows));
     }
 }
 

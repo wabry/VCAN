@@ -36,7 +36,7 @@ class dbWrapper {
         var apps = [];
         let db = this.connection();
         let sql = "select a.name from applications a join filed s on" +
-                  " a.ID == s.appID join folders f of f.ID == s.folderID" +
+                  " a.ID == s.appID join folders f on f.ID == s.folderID" +
                   " where f.name == ?";
         this.getAsync(db, sql, [folder]).then((rows) => {apps = rows} );
         return apps;
@@ -46,7 +46,7 @@ class dbWrapper {
         let db = this.connection();
         let sql1 = "select id as fid from folders where name == ?";
         this.getAsync(db, sql1, [folder]).then ((rows1) => {
-            let fid = rows[0].fid;
+            let fid = rows1[0].fid;
             let sql2 = "select id as aid from applications where name == ?";
             this.getAsync(db, sql2, [app]).then ((rows2) => {
                 let aid = rows2[0].aid;
@@ -61,7 +61,7 @@ class dbWrapper {
         let db = this.connection();
         let sql1 = "select id as fid from folders where name == ?";
         this.getAsync(db, sql1, [folder]).then ((rows1) => {
-            let fid = rows[0].fid;
+            let fid = rows1[0].fid;
             let sql2 = "select id as aid from applications where name == ?";
             this.getAsync(db, sql2, [app]).then ((rows2) => {
                 let aid = rows2[0].aid;
@@ -77,7 +77,7 @@ class dbWrapper {
         let db = this.connection();
         let sql1 = "select ID as fid from folders where name == ?";
         this.getAsync(db, sql1, [folder]).then((rows1) => {
-            let fid = rows[0].fid;
+            let fid = rows1[0].fid;
             let sql2 = "select name from folders where parentID = ?";
             this.getAsync(db, sql2 [fid]).then((rows2) => { folders = rows2});
         });
@@ -125,11 +125,15 @@ class dbWrapper {
     static searchFolder (folderName) {
     	// Searches the database for the folderName
         let db = this.connection();
+        let sql = "select name from folders where name == ?";
+        this.getAsync(db, sql);
     }
 
     static searchApp (appName) {
     	// Searches the database for the appName
         let db = this.connection();
+        let sql = "select name from apps where name == ?";
+        this.getAsync(db, sql);
     }
 }
 

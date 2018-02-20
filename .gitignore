@@ -1,1 +1,4 @@
 webserver/node_modules
+lambda_code/lib.pyc
+lambda_code/lamda_function.pyc
+lambda_code/__pycache__

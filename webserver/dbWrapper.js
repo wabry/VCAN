@@ -38,9 +38,11 @@ class dbWrapper {
         let sql = "select a.name from applications a join filed s on" +
                   " a.ID == s.appID join folders f on f.ID == s.folderID" +
                   " where f.name == ?";
-        this.getAsync(db, sql, [folder]).then(callback(rows));
+        this.getAsync(db, sql, [folder]).then(function(rows) {
+            callback(rows);
+        });
     }
-    static addApp (app, folder) {
+    static addApp (app, folder, callback) {
         // Adds the app to the folder
         let db = this.connection();
         let sql1 = "select id as fid from folders where name == ?";
@@ -78,7 +80,9 @@ class dbWrapper {
         this.getAsync(db, sql1, [folder]).then((rows1) => {
             let fid = rows1[0].fid;
             let sql2 = "select name from folders where parentID = ?";
-            this.getAsync(db, sql2 [fid]).then(callback(rows));
+            this.getAsync(db, sql2, [fid]).then(function(rows) {
+                callback(rows);
+            });
         });
     }
 

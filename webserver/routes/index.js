@@ -135,4 +135,17 @@ router.post('/traverse/:dest', function(req,res,next) {
 	res.end();
 });
 
+function adjustName(name) {
+    var equalsSpot;
+    for(var i=name.length-1; i>=0; i--)
+    {
+        if(name[i] == '=') 
+        { 
+            equalsSpot = i;
+            break;
+        }
+    }
+    return name.substring(equalsSpot+1);
+}
+
 module.exports = router;

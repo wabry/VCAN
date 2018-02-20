@@ -49,8 +49,8 @@ app.use(function(err, req, res, next) {
 });
 
 // Listen on port 8000 (for localhost) or port 80 (for Pi 3 & dataplicity forwarding)
-app.listen(80, function () {
-	console.log("express has started on port 80");
+app.listen(8000, function () {
+	console.log("express has started on port 8000");
 });
 
 module.exports = app;

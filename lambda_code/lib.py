@@ -1,7 +1,7 @@
 import httplib
 import urllib
 import urllib2
-
+from collections import OrderedDict
 
 
 class Request(object):
@@ -52,7 +52,7 @@ class App(Entity):
         
     def add(self, name):
         params = urllib.urlencode({"name": name})
-        return self.send_request("POST", "", self.arg1)
+        return self.send_request("POST", "", params)
 
 
     def delete(self, name):
@@ -61,7 +61,7 @@ class App(Entity):
         
 
     def move(self, name, dest):
-        params = urllib.urlencode({"name": name, "folder": dest})
+        params = urllib.urlencode(OrderedDict([("name", name), ("folder", dest)]))
         return self.send_request("POST", "move/", params)
         
 
@@ -77,16 +77,16 @@ class Folder(Entity):
 
     def create(self, name):
         params = urllib.urlencode({"name": name})
-        return self.send_request("POST", "/", params)
+        return self.send_request("POST", "", params)
 
 
     def delete(self, name):
         params = urllib.urlencode({"name": name})
-        return self.send_request("DELETE", "/", params)
+        return self.send_request("DELETE", "", params)
 
 
     def move(self, name, dest):
-        params = urllib.urlencode({"name": name, "folder": dest})
+        params = urllib.urlencode(OrderedDict([("name", name), ("destFolder", dest)]))
         return self.send_request("POST", "move/", params)
 
 
@@ -96,6 +96,6 @@ class Folder(Entity):
 
 
     def rename(self, old_name, new_name):
-        params = urllib.urlencode({"oldFolder": old_name, "newFolder": new_name})
+        params = urllib.urlencode(OrderedDict([("oldFolder", old_name), ("newFolder", new_name)]))
         return self.send_request("PUT", "rename/", params)
 

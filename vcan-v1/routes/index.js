@@ -28,7 +28,7 @@ router.get('/log', function(req, res, next) {
 /* Search for a folder */
 router.get('/folder/:search_word', function(req, res, next) {
 	// Search for the folder
-	var searchName = req.params.search_word;
+	var searchName = adjustName(req.params.search_word);
 	var returnJSON = JSON.stringify(dbWrapper.searchFolder(searchName));
 	// Log transaction
 	state.stateModule.appendToLog(Date(),'Search for folder ' + searchName);
@@ -41,7 +41,7 @@ router.get('/folder/:search_word', function(req, res, next) {
 /* Search for an application */
 router.get('/app/:search_word', function(req, res, next) {
 	// Search for the app
-	var searchName = req.params.search_word;
+	var searchName = adjustName(req.params.search_word);
 	var returnJSON = JSON.stringify(dbWrapper.searchApp(searchName));
 	// Log transaction
 	state.stateModule.appendToLog(Date(),'Search for app ' + searchName);
@@ -54,7 +54,7 @@ router.get('/app/:search_word', function(req, res, next) {
 /* Search for anything related to a name */
 router.get('/search/:search_word', function(req, res, next) {
 	// Search for the app or folder
-	var searchName = req.params.search_word;
+	var searchName = adjustName(req.params.search_word);
 	var returnJSON = JSON.stringify(dbWrapper.search(searchName));
 	// Log transaction
 	state.stateModule.appendToLog(Date(),'Search for word ' + searchName);
@@ -67,7 +67,7 @@ router.get('/search/:search_word', function(req, res, next) {
 /* Create a folder */
 router.post('/folder/:name', function(req, res, next) {
 	// Create the folder
-	var folderName = req.params.name;
+	var folderName = adjustName(req.params.name);
 	state.stateModule.addFolder(folderName);
 	// Log transaction
 	state.stateModule.appendToLog(Date(),'Created folder ' + folderName);
@@ -77,8 +77,8 @@ router.post('/folder/:name', function(req, res, next) {
 /* Move a folder */
 router.post('/folder/move/:name&:destFolder', function(req, res, next) {
 	// Create the folder
-	var folderName = req.params.name;
-	var destFolder = req.params.destFolder;
+	var folderName = adjustName(req.params.name);
+	var destFolder = adjustName(req.params.destFolder);
 	state.stateModule.moveFolder(folderName,destFolder);
 	// Log transaction
 	state.stateModule.appendToLog(Date(),'Moved folder ' + appName + ' to folder ' + destFolder);
@@ -88,7 +88,7 @@ router.post('/folder/move/:name&:destFolder', function(req, res, next) {
 /* Delete a folder */
 router.delete('/folder/:name', function(req, res, next) {
 	// Delete the folder
-	var folderName = req.params.name;
+	var folderName = adjustName(req.params.name);
 	state.stateModule.removeFolder(folderName);
 	// Log transaction
 	state.stateModule.appendToLog(Date(),'Deleted folder ' + folderName);
@@ -98,7 +98,7 @@ router.delete('/folder/:name', function(req, res, next) {
 /* Create an app */
 router.post('/app/:name', function(req, res, next) {
 	// Create the app
-	var appName = req.params.name;
+	var appName = adjustName(req.params.name);
 	state.stateModule.addApp(appName);
 	// Log transaction
 	state.stateModule.appendToLog(Date(),'Created app ' + appName);
@@ -108,8 +108,8 @@ router.post('/app/:name', function(req, res, next) {
 /* Move an app */
 router.post('/app/move/:name&:destFolder', function(req, res, next) {
 	// Create the folder
-	var appName = req.params.name;
-	var destFolder = req.params.destFolder;
+	var appName = adjustName(req.params.name);
+	var destFolder = adjustName(req.params.destFolder);
 	state.stateModule.moveApp(appName,destFolder);
 	// Log transaction
 	state.stateModule.appendToLog(Date(),'Moved app ' + appName + ' to folder ' + destFolder);
@@ -119,7 +119,7 @@ router.post('/app/move/:name&:destFolder', function(req, res, next) {
 /* Delete an app */
 router.delete('/app/:name', function(req, res, next) {
 	// Delete the folder
-	var appName = req.params.name;
+	var appName = adjustName(req.params.name);
 	state.stateModule.removeApp(appName);
 	// Log transaction
 	state.stateModule.appendToLog(Date(),'Deleted app ' + appName);
@@ -129,7 +129,7 @@ router.delete('/app/:name', function(req, res, next) {
 /* Traverse through the filesystem */
 router.post('/traverse/:dest', function(req,res,next) {
 	// Go to the correct destination
-	var destination = req.params.dest;
+	var destination = adjustName(req.params.dest);
 	if(destination == 'UP')
 	{
 		state.stateModule.traverseUp();
@@ -145,7 +145,7 @@ router.post('/traverse/:dest', function(req,res,next) {
 
 // Helper to adjust an inputted name
 function adjustName(name) {
-    var equalsSpot;
+    var equalsSpot = -1;
     for(var i=name.length-1; i>=0; i--)
     {
         if(name[i] == '=') 

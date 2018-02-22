@@ -3,12 +3,20 @@ var router = express.Router();
 var state = require('../stateModule');
 var dbWrapper = require('../dbWrapper');
 
-/* Display all of the current folders and apps */
-router.get('/status', function(req, res, next) {
-	var path = state.stateModule.getPath();
-	var apps = state.stateModule.getApps();
-	var folders = state.stateModule.getFolders();
-	res.render('status', { dir: path, app: apps, folder: folders });
+/* State handling for angular interaction */
+let response = {
+	status: 200,
+	path: '',
+	apps: [],
+	folders: []
+};
+
+/* Get the current state, used by angular front end */
+router.get('/state', function(req, res, next) {
+	response.path = state.stateModule.getPath();
+	response.apps = state.stateModule.getApps();
+	response.folders = state.stateModule.getFolders();
+	res.json(response);
 });
 
 /* Display all of the recent actions completed */

@@ -1,25 +1,3 @@
-<!doctype html>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-
-<!-- jQuery library -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-
-<!-- Latest compiled JavaScript -->
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <title>VCAN</title>
-  <base href="/">
-
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" type="image/x-icon" href="Toucan.ico">
-</head>
-<body>
-  <app-root></app-root>
-</body>
-</html>
-
 <head>
 <style>
 body{
@@ -378,19 +356,16 @@ p {
 <body>
 <h1 style="font-family:verdana;">Voice Controlled Assisted Navigation</h1>
 
-<h2>Current Path: {{dir}}</h2>
+<h2>Current Path: {{ path }}</h2>
 <h3>Apps</h3>
 <ul>
-	{{#each app}}
-    	<li> {{this}} </li>
-	{{/each}}
+  <li *ngFor="let app of apps">{{ app }}</li>
 </ul>
 <h3>Folders</h3>
 <ul>
-	{{#each folder}}
-    	<li> {{this}} </li>
-	{{/each}}
+  <li *ngFor="let folder of folders">{{ folder }}</li>
 </ul>
+
 
 <div class="toucan">
     <div class="cloud">
@@ -421,3 +396,4 @@ p {
   </div>
 </body>
 <p>By William Bryant, Andrew Katcha, Caleb Boyer, and Josh Knill</p>
+

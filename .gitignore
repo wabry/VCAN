@@ -2,3 +2,6 @@ webserver/node_modules
 lambda_code/lib.pyc
 lambda_code/lamda_function.pyc
 lambda_code/__pycache__
+vcan-v1/vcan.sqlite3
+vcan-v1/node_modules
+vcan-v1/dist

@@ -19,5 +19,5 @@ CREATE TABLE applications(
 	favorited INTEGER,
 	CONSTRAINT appnames UNIQUE(name),
 	PRIMARY KEY(ID),
-	FOREIGN KEY(folderName) REFERENCES folders(name)
+	FOREIGN KEY(folderName) REFERENCES folders(name) ON DELETE CASCADE
 );

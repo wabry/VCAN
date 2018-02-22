@@ -8,7 +8,7 @@ var stateModule = (function() {
     var log = [];
     // State of the filesystem
     var path = '~';               // Current path of the system
-    var parentFolder = '';        // Current parent directory, initialized to nothing
+    var parentFolder = 'root';        // Current parent directory, initialized to nothing
     var currentFolder = 'root';   // Current directory, initialized to root, has no parent
     var folders = [];             // Folders in current directory
     var apps = [];                // Apps in current directory
@@ -28,9 +28,14 @@ var stateModule = (function() {
             folders.push(dbFolders[i].name);
         }
     };
+
     pub.getParentCb = function(dbParent) {
-        console.log("Updating parent");
-        this.parentFolder = dbParent[0].name;
+        // Update the folders
+        currentFolder = parentFolder;
+        parentFolder = dbParent[0].parentName;
+        // Update the folders and apps
+        dbWrapper.getApps(currentFolder,pub.getAppsCb);
+        dbWrapper.getFolders(currentFolder,pub.getFolderCb);
     };
 
     /***** Log Functionality *****/
@@ -46,21 +51,11 @@ var stateModule = (function() {
     /***** App Functionality  ******/
     // Add the app to the app list
     pub.addApp = function (appName) {
-        // Add the app to the app list
-        apps.push(appName);
         // Add the app to the database
         dbWrapper.addApp(appName,currentFolder);    // async
     };
     // Remove an app from the app list
     pub.removeApp = function (appName) {
-        // Find the app to delete, and delete if found
-        for(var i=0; i<apps.length; i++)
-        {
-            if(appName == apps[i])
-            {
-                apps.splice(i,1);
-            }
-        }
         // Delete the app from the database
         dbWrapper.removeApp(appName,currentFolder);    // async
     };
@@ -80,21 +75,11 @@ var stateModule = (function() {
     /****** Folder Functionality ******/
     // Add the folder to the folder list
     pub.addFolder = function (folderName) {
-        // Add the folder to the folder list
-        folders.push(folderName);
         // Add the folder to the database
         dbWrapper.addFolder(folderName,currentFolder);    // async
     };
     // Remove an folder from the folder list
     pub.removeFolder = function (folderName) {
-        // Find the folder to delete, and delete if found
-        for(var i=0; i<apps.length; i++)
-        {
-            if(folderName == folders[i])
-            {
-                folders.splice(i,1);
-            }
-        }
         // Delete the folder from the database
         dbWrapper.removeFolder(folderName,currentFolder);    // async
     };
@@ -114,21 +99,14 @@ var stateModule = (function() {
     /***** Directory Functionality *****/
     // Traverse to the parent folder
     pub.traverseUp = function () {
-        // If no parent, cannot traverse up
-        if(parentFolder == '') 
+        // Update the path if necessary
+        if(!(parentFolder == 'root' && currentFolder == 'root'))
         {
-
-        }
-        else 
-        {
-            // Update the current and parent folders
-            currentFolder = parentFolder;
-            dbWrapper.getParent(currentFolder,pub.getParentCb);
             path = moveUpPath(path);
-            // Update the folders and apps
-            dbWrapper.getApps(currentFolder,pub.getAppsCb);    // async
-            dbWrapper.getFolders(currentFolder,pub.getFolderCb);    // async
         }
+        // Update the current and parent folders
+        currentFolder = parentFolder;
+        dbWrapper.getParent(currentFolder,pub.getParentCb);
     };
     // Traverse to a sub folder
     pub.traverseDown = function(folderName) {

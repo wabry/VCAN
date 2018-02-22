@@ -72,7 +72,7 @@ class dbWrapper {
         // Adds the folderToAdd to the folder
         let db = this.connection();
         let sql = "insert into folders(name, parentName) values (?,?)";
-        this.asyncRun(db, sql, [folderToAdd, folder]).then(() = > {db.close()})
+        this.asyncRun(db, sql, [folderToAdd, folder]).then(() => {db.close()})
         .catch(error => console.log(error));
     }
 
@@ -80,7 +80,7 @@ class dbWrapper {
         // Removes the folderToRemove from the folder
         let db = this.connection();
         let sql = "delete from folders where name == ? and static is null";
-        this.asyncRun(db, sql, [folderToRemove]).then(() = > {db.close()})
+        this.asyncRun(db, sql, [folderToRemove]).then(() => {db.close()})
         .catch(error => console.log(error));
     }
 

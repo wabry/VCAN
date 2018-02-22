@@ -53,11 +53,13 @@ var stateModule = (function() {
     pub.addApp = function (appName) {
         // Add the app to the database
         dbWrapper.addApp(appName,currentFolder);    // async
+        dbWrapper.getApps(currentFolder,pub.getAppsCb);
     };
     // Remove an app from the app list
     pub.removeApp = function (appName) {
         // Delete the app from the database
         dbWrapper.removeApp(appName,currentFolder);    // async
+        dbWrapper.getApps(currentFolder,pub.getAppsCb);
     };
     // Move the app
     pub.moveApp = function (appName, destFolder) {
@@ -65,6 +67,7 @@ var stateModule = (function() {
         pub.removeApp(appName);
         // Add the folder to the right place in the db
         dbWrapper.addApp(appName,destFolder);    // async
+        dbWrapper.getApps(currentFolder,pub.getAppsCb);
     };
     // Get all apps from the app list
     pub.getApps = function() {
@@ -77,11 +80,13 @@ var stateModule = (function() {
     pub.addFolder = function (folderName) {
         // Add the folder to the database
         dbWrapper.addFolder(folderName,currentFolder);    // async
+        dbWrapper.getFolders(currentFolder,pub.getFolderCb);
     };
     // Remove an folder from the folder list
     pub.removeFolder = function (folderName) {
         // Delete the folder from the database
         dbWrapper.removeFolder(folderName,currentFolder);    // async
+        dbWrapper.getFolders(currentFolder,pub.getFolderCb);
     };
     // Move the folder
     pub.moveFolder = function (folderName, destFolder) {
@@ -89,6 +94,7 @@ var stateModule = (function() {
         pub.removeFolder(folderName);
         // Add the folder to the right place in the db
         dbWrapper.addFolder(folderName,destFolder);    // async
+        dbWrapper.getFolders(currentFolder,pub.getFolderCb);
     };
     // Get all folders in the current directory
     pub.getFolders = function() {

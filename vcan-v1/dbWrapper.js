@@ -33,107 +33,99 @@ class dbWrapper {
 
     static getApps (folder, callback) {
         // Gets all apps in a folder
-        var apps = [];
         let db = this.connection();
-        let sql = "select a.name from applications a join filed s on" +
-                  " a.ID == s.appID join folders f on f.ID == s.folderID" +
-                  " where f.name == ?";
-        this.getAsync(db, sql, [folder]).then(function(rows) {
+        let sql = "select name from applications where folderName = ?";
+        this.getAsync(db, sql, [folder]).then((rows) => {
             callback(rows);
-        });
+            db.close();
+        })
+        .catch(error => console.log(error));
     }
-    static addApp (app, folder) {
+    static addApp (app, folder, callback) {
         // Adds the app to the folder
         let db = this.connection();
-        let sql1 = "select id as fid from folders where name == ?";
-        this.getAsync(db, sql1, [folder]).then ((rows1) => {
-            let fid = rows1[0].fid;
-            let sql2 = "select id as aid from applications where name == ?";
-            this.getAsync(db, sql2, [app]).then ((rows2) => {
-                let aid = rows2[0].aid;
-                let sql3 = "insert into filed(folderID, appID) values(?,?)";
-                this.asyncRun(db, sql3, [fid, aid]); 
-            });
-        });
+        let sql = "insert into applications(name, folderName) values(?,?)";
+        this.asyncRun(db, sql, [app, folder]).then(() => {db.close()})
+        .catch(error => console.log(error));
     }
 
     static removeApp (app, folder) {
         // Removes the app from the folder
         let db = this.connection();
-        let sql1 = "select id as fid from folders where name == ?";
-        this.getAsync(db, sql1, [folder]).then ((rows1) => {
-            let fid = rows1[0].fid;
-            let sql2 = "select id as aid from applications where name == ?";
-            this.getAsync(db, sql2, [app]).then ((rows2) => {
-                let aid = rows2[0].aid;
-                let sql3 = "delete from filed where folderID == ? and appID == ?";
-                this.asyncRun(db, sql3, [fid, aid]);
-            });
-        });
+        let sql = "delete from applications where name = ? and folderName = ?";
+        this.asyncRun(db, sql, [app, folder]).then(() => {db.close()})
+        .catch(error => console.log(error));
     }
 
     static getFolders (folder, callback) {
         // Gets all folders in a folder
-        var folders = [];
         let db = this.connection();
-        let sql1 = "select ID as fid from folders where name == ?";
-        this.getAsync(db, sql1, [folder]).then((rows1) => {
-            let fid = rows1[0].fid;
-            let sql2 = "select name from folders where parentID = ?";
-            this.getAsync(db, sql2, [fid]).then(function(rows) {
-                callback(rows);
-            });
-        });
+        let sql = "select name from folders where parentName = ? and name != 'root'";
+        this.getAsync(db, sql, [folder]).then((rows) => {
+            callback(rows);
+            db.close();
+        })
+        .catch(error => console.log(error));
     }
 
     static addFolder (folderToAdd, folder) {
         // Adds the folderToAdd to the folder
         let db = this.connection();
-        let sql1 = "select ID as fid from folders where name == ?";
-        this.getAsync(db, sql1, [folder]).then((rows) =>{
-            let fid = rows[0].fid;
-            let sql2 = "insert into folders(name, parentID) values(?,?)";
-            this.asyncRun(db, sql2, [folderToAdd, fid]);
-        });
+        let sql = "insert into folders(name, parentName) values (?,?)";
+        this.asyncRun(db, sql, [folderToAdd, folder]).then(() => {db.close()})
+        .catch(error => console.log(error));
     }
 
     static removeFolder (folderToRemove, folder) {
         // Removes the folderToRemove from the folder
         let db = this.connection();
         let sql = "delete from folders where name == ?";
-        this.asyncRun(db, sql, [folderToRemove]);
+        this.asyncRun(db, sql, [folderToRemove]).then(() => {db.close()})
+        .catch(error => console.log(error));
     }
 
     static getParent(folder, callback) {
         // Gets the parent folder of a folder
         let db = this.connection();
-        let sql1 = "select id as fid from folders where name == ?";
-        this.getAsync(db,sql1, [folder]).then((rows) => {
-            let fid = rows[0].fid;
-            let sql2 = "select name from folders where id == ?";
-            this.getAsync(db, sql2, [fid]).then(callback(rows));
-        });
+        let sql = "select parentName from folders where name == ?";
+        this.getAsync(db,sql, [folder]).then((rows) => {
+            callback(rows);
+            db.close();
+        })
+        .catch(error => console.log(error));
     }
 
     static search (searchName, callback) {
     	// Searches the database for something with the name
         let db = this.connection();
         let sql = "(select name from folders where name == ?) union all (select name from applications where name == ?";
-        this.getAsync(db, sql, [searchName]).then(callback(rows));
+        this.getAsync(db, sql, [searchName]).then((rows) => {
+            callback(rows);
+            db.close();
+        })
+        .catch(error => console.log(error));
     }
 
     static searchFolder (folderName, callback) {
     	// Searches the database for the folderName
         let db = this.connection();
         let sql = "select name from folders where name == ?";
-        this.getAsync(db, sql).thn(callback(rows));
+        this.getAsync(db, sql, [folderName]).then((rows) => {
+            callback(rows);
+            db.close();
+        })
+        .catch(error => console.log(error));
     }
 
     static searchApp (appName, callback) {
     	// Searches the database for the appName
         let db = this.connection();
         let sql = "select name from apps where name == ?";
-        this.getAsync(db, sql).then(callback(rows));
+        this.getAsync(db, sql, [appName]).then((rows) => {
+            callback(rows);
+            db.close();
+        })
+        .catch(error => console.log(error));
     }
 }
 

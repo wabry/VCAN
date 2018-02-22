@@ -16,7 +16,6 @@ router.get('/state', function(req, res, next) {
 	response.path = state.stateModule.getPath();
 	response.apps = state.stateModule.getApps();
 	response.folders = state.stateModule.getFolders();
-	console.log(response);
 	res.json(response);
 });
 

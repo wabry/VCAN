@@ -1,5 +1,5 @@
-INSERT INTO folders(ID,name,parentID,favorited,static)
+INSERT INTO folders(ID,name,parentName,favorited,static)
 VALUES
-(0,'root',0,NULL,1),
-(1,'downloads',0,NULL,1),
-(2,'favorites',0,NULL,1);
+(0,'root','root',NULL,1),
+(1,'downloads','root',NULL,1),
+(2,'favorites','root',NULL,1);

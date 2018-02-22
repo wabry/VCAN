@@ -1,6 +1,60 @@
-<h1>Voice Controlled Assisted Navigation</h1>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 
-<h2>Current Path: {{ path }}</h2>
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<head>
+<style>
+body {
+    background-color: lightblue;
+}
+
+h1 {
+	border-style: ridge;
+    color: white;
+    text-align: center;
+    text-shadow: 0 0 5px blue, 0 0 5px darkblue;
+
+}
+
+h4 {
+    color: white;
+    text-align: center;
+}
+
+h3 {
+
+
+    text-shadow: 1px 1px 2px #000000;
+    color: white;
+    text-align: center;
+}
+
+ul {
+    color: white;
+    text-align: center;
+}
+
+li {
+
+    color: white;
+    text-align: center;
+    padding-bottom: 50px
+}
+
+
+p {
+    color: white;
+    text-align: center;
+    font-family: verdana;
+    font-size: 10px;
+}
+
+
+
+<h1 style="font-family:verdana;">Voice Controlled Assisted Navigation</h1>
 <h3>Apps</h3>
 <ul>
   <li *ngFor="let app of apps">{{ app }}</li>
@@ -9,3 +63,4 @@
 <ul>
   <li *ngFor="let folder of folders">{{ folder }}</li>
 </ul>
+<p>Current Path: {{ path }}</p>

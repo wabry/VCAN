@@ -6,7 +6,7 @@ from collections import OrderedDict
 
 class Request(object):
     def __init__(self):
-        self.hostname = "chaffiest-budgerigar-7836.dataplicity.io"
+        self.hostname = "cockneyish-peacock-7451.dataplicity.io"
         self.path = "/api/alexa/v1/"
 
     def send_request(self, http_method, action, params):

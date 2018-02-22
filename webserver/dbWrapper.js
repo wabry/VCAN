@@ -60,7 +60,7 @@ class dbWrapper {
     static getFolders (folder, callback) {
         // Gets all folders in a folder
         let db = this.connection();
-        let sql = "select name from folders where parentName = ?";
+        let sql = "select name from folders where parentName = ? and name != 'root'";
         this.getAsync(db, sql, [folder]).then((rows) => {
             callback(rows);
             db.close();

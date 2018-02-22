@@ -28,9 +28,14 @@ var stateModule = (function() {
             folders.push(dbFolders[i].name);
         }
     };
+
     pub.getParentCb = function(dbParent) {
-        console.log(parentName + ':' + dbParent[0].parentName);
-        this.parentFolder = dbParent[0].parentName;
+        // Update the folders
+        currentFolder = parentFolder;
+        parentFolder = dbParent[0].parentName;
+        // Update the folders and apps
+        dbWrapper.getApps(currentFolder,pub.getAppsCb);
+        dbWrapper.getFolders(currentFolder,pub.getFolderCb);
     };
 
     /***** Log Functionality *****/
@@ -94,23 +99,14 @@ var stateModule = (function() {
     /***** Directory Functionality *****/
     // Traverse to the parent folder
     pub.traverseUp = function () {
-        // If no parent, cannot traverse up
-        if(parentFolder == 'root' && currentFolder == 'root') 
+        // Update the path if necessary
+        if(!(parentFolder == 'root' && currentFolder == 'root'))
         {
-
-        }
-        else 
-        {
-            console.log('TRAVERSE TO THIS');
-            console.log(parentFolder);
-            // Update the current and parent folders
-            currentFolder = parentFolder;
-            dbWrapper.getParent(currentFolder,pub.getParentCb);
             path = moveUpPath(path);
-            // Update the folders and apps
-            dbWrapper.getApps(currentFolder,pub.getAppsCb);    // async
-            dbWrapper.getFolders(currentFolder,pub.getFolderCb);    // async
         }
+        // Update the current and parent folders
+        currentFolder = parentFolder;
+        dbWrapper.getParent(currentFolder,pub.getParentCb);
     };
     // Traverse to a sub folder
     pub.traverseDown = function(folderName) {

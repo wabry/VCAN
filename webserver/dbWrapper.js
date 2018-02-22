@@ -79,7 +79,7 @@ class dbWrapper {
     static removeFolder (folderToRemove, folder) {
         // Removes the folderToRemove from the folder
         let db = this.connection();
-        let sql = "delete from folders where name == ?";
+        let sql = "delete from folders where name == ? and static is null";
         this.asyncRun(db, sql, [folderToRemove]).then(() = > {db.close()})
         .catch(error => console.log(error));
     }

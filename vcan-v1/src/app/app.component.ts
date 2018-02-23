@@ -21,7 +21,7 @@ export class AppComponent implements OnInit, OnDestroy {
     this.refreshData();
     this.interval = setInterval(() => {
         this.refreshData(); 
-    }, 5000);
+    }, 50);
   }
 
   // Called on destroy

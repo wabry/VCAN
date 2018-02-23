@@ -34,7 +34,7 @@ class dbWrapper {
     static getApps (folder, callback) {
         // Gets all apps in a folder
         let db = this.connection();
-        let sql = "select appName from filed where folderName = ?";
+        let sql = "select name from applications where folderName = ?";
         this.getAsync(db, sql, [folder]).then((rows) => {
             callback(rows);
             db.close();
@@ -44,7 +44,7 @@ class dbWrapper {
     static addApp (app, folder, callback) {
         // Adds the app to the folder
         let db = this.connection();
-        let sql = "insert into filed(appName, folderName) values(?,?)";
+        let sql = "insert into applications(name, folderName) values(?,?)";
         this.asyncRun(db, sql, [app, folder]).then(() => {db.close()})
         .catch(error => console.log(error));
     }
@@ -52,7 +52,7 @@ class dbWrapper {
     static removeApp (app, folder) {
         // Removes the app from the folder
         let db = this.connection();
-        let sql = "delete from filed where appName = ? and folderName = ?";
+        let sql = "delete from applications where name = ? and folderName = ?";
         this.asyncRun(db, sql, [app, folder]).then(() => {db.close()})
         .catch(error => console.log(error));
     }

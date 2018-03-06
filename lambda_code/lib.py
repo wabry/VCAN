@@ -27,12 +27,11 @@ class Entity(Request):
         super(Entity, self).send_request(http_method, self.entity_type + action, params)
 
 class Traverse(Request):
-    def __init__(self, dest):
+    def __init__(self):
         Request.__init__(self)
-        self.dest = dest
 
-    def traverse():
-        params = urllib.urlencode({"name": self.dest})
+    def traverse(self, dest):
+        params = urllib.urlencode({"name": dest})
         return self.send_request("POST", "traverse", params)
 
 

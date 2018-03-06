@@ -22,7 +22,6 @@ class Entity(Request):
         Request.__init__(self)
         self.entity_type = entity_type
 
-
     def send_request(self, http_method, action, params):
         super(Entity, self).send_request(http_method, self.entity_type + action, params)
 

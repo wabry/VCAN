@@ -1,11 +1,48 @@
 <head>
 		<style>
+			.lightblue-background {
+			 border-radius: 8px;
+			 background-color: white;
+		}
+		.white-background {
+			   border-radius: 8px;
+		  background-color: lightblue;
+		}
+		  .text-center {
+			text-align: center;
+		}
+		.outer-div
+		{
+			border-radius: 8px;
+			margin: auto;
+			padding: 40px 0px 40px 0px;
+			width: 80%;
+		}
+		.inner-div
+		{
+			background: white;
+			display: inline-block;
+			padding: 5px;
+			   border-radius: 8px;
+		}
+		.center {
+			margin-left: auto;
+			margin-right: auto;
+			display: table;
+		}
+		.blue-space-top
+		{
+		  margin-top: 25px;
+		}
+		
 		body{
-			margin:0;
-			color:#444;
-			background:#f9ecb7;
+			margin:60px;
+			color:#000;
+			background:#CEFFB6;
 			font:300 18px/18px Roboto, sans-serif;
 		}
+
+
 		*,:after,:before{box-sizing:border-box}
 		.pull-left{float:left}
 		.pull-right{float:right}
@@ -32,7 +69,7 @@
 		}
 		
 		.toucan{
-			width:270px;
+			width:135px;
 			height:365px;
 			padding-left:75px;
 			position:relative;
@@ -308,104 +345,156 @@
 			right:10px;
 		}
 		
+		table{    
+			border-collapse: collapse;
+		}  
+		
+		th  {
+			padding: 5px;
+			width: 70px;
+			text-align: center;    
+		}
+		  
+		
+		td {
+			padding: 5px;
+			width: 70px;
+			text-align: center;    
+		}
+		  
 		h1 {
-			border-style: ridge;
-			color: black;
+			margin-top: -40px;
+			border-style: solid;
+			border-radius: 7px;
+			border-width: 0px 10px 2px 20px;
+			background-color: white;
+			color: #f9ecb7;
+			height: 75px;
+		
 			text-align: center;
-			text-shadow: 0 0 5px gray, 0 0 5px darkgray;
+			text-shadow: 1px 1px 2px #000000;
 		}
 		
 		h4 {
-			color: black;
+			text-shadow: 1px 1px 2px #000000;
+			color: #f9ecb7;
 			text-align: center;
 		}
 		
 		h2 {
 			text-shadow: 1px 1px 2px #000000;
-			color: black;
+			color: #f9ecb7;
 			text-align: center;
 		}
 		
 		h3 {
 			text-shadow: 1px 1px 2px #000000;
-			color: black;
+			color: #f9ecb7;
 			text-align: center;
 		}
 		
 		ul {
-			color: black;
+			text-shadow: 1px 1px 2px #000000;
+			color: #f9ecb7;
 			text-align: center;
-			list-style: none;
 		}
 		
 		li {
-			color: black;
+			color: #f9ecb7;
 			text-align: center;
 			margin-left: -35px;
+			display:inline;
 		}
 		
 		p {
-			color: black;
+			text-shadow: 1px 1px 2px #000000;
+			color: #f9ecb7;
 			text-align: center;
 			font-family: verdana;
-			font-size: 10px;
+			font-size: 20px;
 		}
 		
+		ul#horizontal li {
+			display:inline;
+		}  
+
 		</style>
 		</head>
-		<body>
-		<h1 style="font-family:verdana;">Voice Controlled Assisted Navigation</h1>
-		
-		<h2>Current Page: {{ pageName }}</h2>
-		<h2>Current View: {{ storeView }}</h2>
-		<h3>Categories</h3>
-		<ul>
-		  <li *ngFor="let cat of categoryList">{{ cat }}</li>
-		</ul>
-		<h3>Apps</h3>
-		<ul>
-		  <li *ngFor="let app of storeAppNames">{{ app }}</li>
-		</ul>
-		
-		<!--
-		<h2>Current Path: {{ path }}</h2>
-		<h3>Apps</h3>
-		<ul>
-		  <li *ngFor="let app of apps">{{ app }}</li>
-		</ul>
-		<h3>Folders</h3>
-		<ul>
-		  <li *ngFor="let folder of folders">{{ folder }}</li>
-		</ul>
-		-->
-		
-		<div class="toucan">
-			<div class="cloud">
-			  <div class="line-a"></div>
-			  <div class="line-b"></div>
-			  <div class="line-c"></div>
-			  <div class="line-d"></div>
-			</div>
-			<div class="head">
-			  <div class="top"></div>
-			  <div class="peak"></div>
-			  <div class="eye-wrap">
-				<div class="retina"></div>
-			  </div>
-			</div>
-			<div class="body">
-			  <div class="chest"></div>
-			  <div class="wing left"></div>
-			  <div class="wing right"></div>
-			</div>
-			<div class="tail">
-			  <div class="wood"><span class="leaf"></span></div>
-			  <div class="legs">
-				<span class="left"></span>
-				<span class="right"></span>
-			  </div>
-			</div>
-		  </div>
-		</body>
-		<p>By William Bryant, Andrew Katcha, Caleb Boyer, and Josh Knill</p>
+
+
+	<div>
+			<body>
+					<h1 style="font-family:verdana" *ngIf="true;">VCAN Home</h1>
+					<h1 style="font-family:verdana" *ngIf="true;">Filesystem</h1>
+					<h1 style="font-family:verdana" *ngIf="true;">Help</h1>
+					<h1 style="font-family:verdana" *ngIf="true;">Skills Store</h1>
+					<div *ngIf="true;">
+						<h2>Current Path: {{ path }}</h2>
+						<h3>Skills</h3>
+						<ul>
+							<li *ngFor="let app of apps">{{ apps }}</li>
+						</ul>
+						<h3>Folders</h3>
+						<ul>
+							<li *ngFor="let folder of folders">{{ folders }}</li>
+						</ul>
+					</div>
+					<div *ngIf="true;">
+						<h2>Welcome To VCAN</h2>
+						<h3>Find a skill, get a skill, and organize your skills!</h3>
+						<h3>For help, just say "Help" and the VCAN Toucan will help you out</h3>
+					</div>
+					<div *ngIf="true;">
+						<h3>Help Blurb</h3>
+					</div>
+					<div *ngIf="true;">
+						<h3>Categories</h3>
+						<ul>
+							<li *ngFor="let cat of categoryList">{{ cat }}</li>
+						</ul>
+					</div>
+					<div *ngIf="true;">
+						<h3>Skills</h3>
+						<table class="image" style="width:90%" align="center">
+							<tr>
+								<td *ngFor="let pic of storeAppImage">
+									<img src={{pic}} alt="Nimg" width="45" height="45">
+									</td>
+									<tr>
+										<td *ngFor="let app of storeAppNames">{{app}}
+					</td>
+									</table>
+								</div>
+								<div class="toucan">
+									<div class="cloud">
+										<div class="line-a"></div>
+										<div class="line-b"></div>
+										<div class="line-c"></div>
+										<div class="line-d"></div>
+									</div>
+									<div class="head">
+										<div class="top"></div>
+										<div class="peak"></div>
+										<div class="eye-wrap">
+											<div class="retina"></div>
+										</div>
+									</div>
+									<div class="body">
+										<div class="chest"></div>
+										<div class="wing left"></div>
+										<div class="wing right"></div>
+									</div>
+									<div class="tail">
+										<div class="wood">
+											<span class="leaf"></span>
+										</div>
+										<div class="legs">
+											<span class="left"></span>
+											<span class="right"></span>
+										</div>
+									</div>
+								</div>
+							</body>
+							</div>
+							<p>By William Bryant, Andrew Katcha, Caleb Boyer, and Josh Knill</p>
 		

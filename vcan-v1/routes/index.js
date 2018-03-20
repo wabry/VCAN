@@ -196,9 +196,9 @@ router.post('/screen/:name', function(req, res, next) {
 });
 
 /* Dive into a category in the store view */
-router.post('/appStore/:category', function(req, res, next) {
+router.post('/appStore/category/:index', function(req, res, next) {
 	// Get the category index
-	var categoryIndex = adjustName(req.params.category);
+	var categoryIndex = adjustName(req.params.index);
 	// Only accept these requests if we are in the Categories page
 	if(state.stateModule.getStoreView() == 'Categories' || categoryIndex == -1)
 	{
@@ -221,9 +221,9 @@ router.post('/appStore/:category', function(req, res, next) {
 });
 
 /* Download an app */
-router.post('/appStore/:app', function(req, res, next) {
+router.post('/appStore/app/:index', function(req, res, next) {
 	// Get the app index
-	var appIndex = adjustName(req.params.category);
+	var appIndex = adjustName(req.params.index);
 	// Download the app
 
 	// Log transaction

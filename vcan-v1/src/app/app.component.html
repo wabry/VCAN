@@ -377,23 +377,29 @@
 		
 		h4 {
 			text-shadow: 1px 1px 2px #000000;
-			color: #f9ecb7;
+			color: #745423;
 			text-align: center;
 		}
 		
 		h2 {
 			text-shadow: 1px 1px 2px #000000;
-			color: #f9ecb7;
+			color: #745423;
 			text-align: center;
 		}
 		
 		h3 {
 			text-shadow: 1px 1px 2px #000000;
-			color: #f9ecb7;
+			color: #745423;
 			text-align: center;
 		}
 		
 		ul {
+			text-shadow: 1px 1px 2px #000000;
+			color: #f9ecb7;
+			text-align: center;
+		}
+
+		ol {
 			text-shadow: 1px 1px 2px #000000;
 			color: #f9ecb7;
 			text-align: center;
@@ -403,7 +409,6 @@
 			color: #f9ecb7;
 			text-align: center;
 			margin-left: -35px;
-			display:inline;
 		}
 		
 		p {
@@ -413,10 +418,6 @@
 			font-family: verdana;
 			font-size: 20px;
 		}
-		
-		ul#horizontal li {
-			display:inline;
-		}  
 
 		</style>
 		</head>
@@ -424,45 +425,65 @@
 
 	<div>
 			<body>
-					<h1 style="font-family:verdana" *ngIf="true;">VCAN Home</h1>
-					<h1 style="font-family:verdana" *ngIf="true;">Filesystem</h1>
-					<h1 style="font-family:verdana" *ngIf="true;">Help</h1>
-					<h1 style="font-family:verdana" *ngIf="true;">Skills Store</h1>
-					<div *ngIf="true;">
+				
+					<h1 style="font-family:verdana" *ngIf="pageName == 'Home';">VCAN Home</h1>
+					<h1 style="font-family:verdana" *ngIf="pageName == 'Filesystem';">Filesystem</h1>
+					<h1 style="font-family:verdana" *ngIf="pageName == 'Help';">Help</h1>
+					<h1 style="font-family:verdana" *ngIf="pageName == 'StoreCategories' || pageName == 'StoreSkills';">Skills Store</h1>
+					<div *ngIf="pageName =='Filesystem';">
 						<h2>Current Path: {{ path }}</h2>
 						<h3>Skills</h3>
 						<ul>
-							<li *ngFor="let app of apps">{{ apps }}</li>
+							<li *ngFor="let app of apps">{{ app }}</li>
 						</ul>
 						<h3>Folders</h3>
 						<ul>
-							<li *ngFor="let folder of folders">{{ folders }}</li>
+							<li *ngFor="let folder of folders">{{ folder }}</li>
 						</ul>
 					</div>
-					<div *ngIf="true;">
+					<div *ngIf="pageName == 'Home';">
 						<h2>Welcome To VCAN</h2>
 						<h3>Find a skill, get a skill, and organize your skills!</h3>
 						<h3>For help, just say "Help" and the VCAN Toucan will help you out</h3>
 					</div>
-					<div *ngIf="true;">
-						<h3>Help Blurb</h3>
+					<div *ngIf="pageName == 'Help';">
+							<h2>Need help? Use these commands to control your Alexa experience!</h2>
+							<h3>Global Navigation:</h3>
+							<p>“Switch To Home” – Navigates back to the home screen</p>
+							<p>“Switch To Help” - Navigates back to the help screen (this menu)</p>
+							<p>“Switch To Filesystem” – Navigates to the filesystem screen</p>
+							<p>“Switch To Store” – Navigates to the store screen</p>
+							<h3>Filesystem Commands:</h3>
+							<p>“Traverse to 'Folder' – Go into a folder named 'Folder'</p>
+							<p>“Traverse up” – Go to your parent folder</p>
+							<p>“Create folder 'Folder'” – Creates a folder named 'Folder'</p>
+							<p>“Move folder 'Folder1' into 'Folder2'” – Moves folder 'Folder1' into 'Folder2'</p>
+							<p>“Delete folder 'Folder'” – Deletes a folder named 'Folder'</p>
+							<p>“Create app 'App'” – Creates an app named 'App'</p>
+							<p>“Move app 'App' into 'Folder'” – Moves app 'App' into 'Folder'</p>
+							<p>“Delete app 'App'” – Deletes an app named 'App'</p>
+							<h3>Store Commands:</h3>
+							<p>"Enter 'CategoryIndex'” – Enter the category at position 'CategoryIndex'</p>
+							<p>“Switch To Store” – Goes back to the default category view</p>
+							<p>“Download 'AppIndex'” – Enables an app at position 'AppIndex', adds it to “downloads" folder</p>	
 					</div>
-					<div *ngIf="true;">
+					<div *ngIf="pageName == 'StoreCategories';">
 						<h3>Categories</h3>
-						<ul>
-							<li *ngFor="let cat of categoryList">{{ cat }}</li>
-						</ul>
+						<ol>
+							<li *ngFor="let cat of categoryList; let i = index">{{i}}: {{ cat }}</li>
+						</ol>
 					</div>
-					<div *ngIf="true;">
-						<h3>Skills</h3>
+					<div *ngIf="pageName == 'StoreSkills';">
+						<h3>Skills in {{storeView}}</h3>
 						<table class="image" style="width:90%" align="center">
 							<tr>
 								<td *ngFor="let pic of storeAppImage">
 									<img src={{pic}} alt="Nimg" width="45" height="45">
-									</td>
-									<tr>
-										<td *ngFor="let app of storeAppNames">{{app}}
-					</td>
+								</td>
+							</tr>
+							<tr>
+								<td *ngFor="let app of storeAppNames; let i = index">{{i}}: {{app}}</td>
+							</tr>
 									</table>
 								</div>
 								<div class="toucan">

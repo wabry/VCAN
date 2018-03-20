@@ -10,6 +10,8 @@ from lib import Traverse
 from lib import App
 from lib import Folder
 from lib import Debug
+from lib import Screen
+from lib import AppStore
 import urllib
 import httplib
 
@@ -45,6 +47,24 @@ def build_response(session_attributes, speechlet_response):
 
 
 # --------------- Functions that control the skill's behavior ------------------
+def send_request(intent, session):
+    """Sends a Request for Debugging Purposes"""
+    card_title = intent['name']
+    session_attributes = {}
+    should_end_session = False
+    
+    connection_debug = Debug()
+
+    try:
+        connection_debug.connect()
+        speech_output = "The response status is: " + str(response.status) + ". And the reason is: " + response.reason
+    except:
+        speech_output = "Connection Failure"
+
+    reprompt_text = ""
+    return build_response(session_attributes, build_speechlet_response(
+        card_title, speech_output, reprompt_text, should_end_session))
+
 
 def get_welcome_response():
     """ If we wanted to initialize the session to have some attributes we could
@@ -264,7 +284,7 @@ def traverse(intent, session):
     speech_output = "Success" # do we need this?
     reprompt_text = ""
     should_end_session = False
-    dest = intent["slots"]["dest"]["name"]
+    dest = intent["slots"]["dest"]["value"]
     
     traverse = Traverse()
     try:
@@ -276,27 +296,78 @@ def traverse(intent, session):
         card_title, speech_output, reprompt_text, should_end_session))
 
 
-
-def send_request(intent, session):
-    """Sends a Request for Debugging Purposes"""
-    card_title = intent['name']
+def switch_screen(intent, session):
+    """Switches the screen between App Store and apps page"""
     session_attributes = {}
-    should_end_session = False
-    
-    connection_debug = Debug()
-
-    try:
-        connection_debug.connect()
-        speech_output = "The response status is: " + str(response.status) + ". And the reason is: " + response.reason
-    except:
-        speech_output = "Connection Failure"
-
+    card_title = intent['name']
+    speech_output = "Success" # do we need this?
     reprompt_text = ""
+    should_end_session = False
+    type = intent["slots"]["type"]["value"]
+    
+    screen = Screen()
+    try:
+        screen.switch_screen(type)
+    except:
+        speech_output = "Failure occured while connecting, please try again."
+    
+    return build_response(session_attributes, build_speechlet_response(
+        card_title, speech_output, reprompt_text, should_end_session))
+
+def app_index(intent, session):
+    """Input the index of the app a user wants to visit"""
+    session_attributes = {}
+    card_title = intent['name']
+    speech_output = "Success" # do we need this?
+    reprompt_text = ""
+    should_end_session = False
+    index = intent["slots"]["index"]["value"]
+    
+    appStore = AppStore()
+    try:
+        appStore.app_select(index)
+    except:
+        speech_output = "Failure occured while connecting, please try again."
+    
     return build_response(session_attributes, build_speechlet_response(
         card_title, speech_output, reprompt_text, should_end_session))
 
 
+def category_index(intent, session):
+    """Input the index of the category a user wants to visit"""
+    session_attributes = {}
+    card_title = intent['name']
+    speech_output = "Success" # do we need this?
+    reprompt_text = ""
+    should_end_session = False
+    index = intent["slots"]["index"]["value"]
+    
+    appStore = AppStore()
+    try:
+        appStore.category_select(index)
+    except:
+        speech_output = "Failure occured while connecting, please try again."
+    
+    return build_response(session_attributes, build_speechlet_response(
+        card_title, speech_output, reprompt_text, should_end_session))
 
+
+def populate_apps(intent, session):
+    """Populate DB with already installed apps"""
+    session_attributes = {}
+    card_title = intent['name']
+    speech_output = "Success" # do we need this?
+    reprompt_text = ""
+    should_end_session = False
+    
+    app = App()
+    try:
+        app.populate()
+    except:
+        speech_output = "Failure occured while connecting, please try again."
+    
+    return build_response(session_attributes, build_speechlet_response(
+        card_title, speech_output, reprompt_text, should_end_session))
 # --------------- Events ------------------
 
 def on_session_started(session_started_request, session):
@@ -326,7 +397,7 @@ def on_intent(intent_request, session):
     intent = intent_request['intent']
     intent_name = intent_request['intent']['name']
 
-    # Dispatch to your skill's intent handlers
+    # ALPHA
     if intent_name == "sendRequest":
         return send_request(intent, session)
     elif intent_name == "createFolder":
@@ -347,14 +418,33 @@ def on_intent(intent_request, session):
         return move_app(intent, session)
     elif intent_name == "searchApplication":
         return search_app(intent, session)
+        
+    # BETA
     elif intent_name == "traverse":
         return traverse(intent, session)
+    elif intent_name == "screenSwitch":
+        return switch_screen(intent, session)
+    elif intent_name == "appIndex":
+        return app_index(intent, session)
+    elif intent_name == "categoryIndex":
+        return category_index(intent, session)
+    elif intent_name == "populateApps":
+        return populate_apps(intent, session)
+        
     elif intent_name == "AMAZON.HelpIntent":
         return get_welcome_response()
     elif intent_name == "AMAZON.CancelIntent" or intent_name == "AMAZON.StopIntent":
         return handle_session_end_request()
     else:
-        raise ValueError("Invalid intent")
+        session_attributes = {}
+        card_title = "Error"
+        speech_output = "Failure, please try again"
+        reprompt_text = "The command issued was not recognized, please try again"
+        should_end_session = False
+        return build_response(session_attributes, build_speechlet_response(
+            card_title, speech_output, reprompt_text, should_end_session))
+
+
 
 
 def on_session_ended(session_ended_request, session):
@@ -395,3 +485,12 @@ def lambda_handler(event, context):
         return on_intent(event['request'], event['session'])
     elif event['request']['type'] == "SessionEndedRequest":
         return on_session_ended(event['request'], event['session'])
+    else:
+        session_attributes = {}
+        card_title = "Error"
+        speech_output = "Failure, please try again"
+        reprompt_text = "The command issued was not recognized, please try again"
+        should_end_session = False
+        return build_response(session_attributes, build_speechlet_response(
+            card_title, speech_output, reprompt_text, should_end_session))
+        

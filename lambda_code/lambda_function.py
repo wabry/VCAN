@@ -1,10 +1,6 @@
 """
-This sample demonstrates a simple skill built with the Amazon Alexa Skills Kit.
-The Intent Schema, Custom Slots, and Sample Utterances for this skill, as well
-as testing instructions are located at http://amzn.to/1LzFrj6
-
-For additional samples, visit the Alexa Skills Kit Getting Started guide at
-http://amzn.to/1LGWsLG  
+This is Code for VCAN based on Amazon's Color Skill Example
+Github: https://github.com/wabry/VCAN 
 """
 
 from __future__ import print_function
@@ -61,8 +57,7 @@ def get_welcome_response():
                     "Ready for a command!"
     # If the user either does not reply to the welcome message or says something
     # that is not understood, they will be prompted again with this text.
-    reprompt_text = "Please tell me your favorite color by saying, " \
-                    "my favorite color is red."
+    reprompt_text = "Ready when you are!."
     should_end_session = False
     return build_response(session_attributes, build_speechlet_response(
         card_title, speech_output, reprompt_text, should_end_session))
@@ -76,33 +71,6 @@ def handle_session_end_request():
     should_end_session = True
     return build_response({}, build_speechlet_response(
         card_title, speech_output, None, should_end_session))
-
-
-# def conduct_action_one_arg(session_attributes, intent, speech_output, reprompt_text, should_end_session, func, instance, arg1):
-#     card_title = intent['name']
-#     print(speech_output)
-#     try:
-#         print(func)
-#         func(instance, arg)
-#         print ("Im here")
-#     except:
-#         speech_output = "Failure"
-
-#     return build_response(session_attributes, build_speechlet_response(
-#         card_title, speech_output, reprompt_text, should_end_session))
-
-
-# def conduct_action_mult_args(session_attributes, intent, speech_output, reprompt_text, should_end_session, func, instance, arg1, arg2):
-#     card_title = intent['name']
-#     try:
-#         func(instance, arg, arg2)
-#     except:
-#         speech_output = "Failure"
-
-#     return build_response(session_attributes, build_speechlet_response(
-#         card_title, speech_output, reprompt_text, should_end_session))
-
-
 
 
 def create_folder(intent, session):
@@ -288,11 +256,29 @@ def search_app(intent, session):
         card_title, speech_output, reprompt_text, should_end_session))
 
 
+def traverse(intent, session):
+    """Traverses the FileSystem """
+
+    session_attributes = {}
+    card_title = intent['name']
+    speech_output = "Success" # do we need this?
+    reprompt_text = ""
+    should_end_session = False
+    dest = intent["slots"]["dest"]["name"]
+    
+    traverse = Traverse()
+    try:
+        traverse.traverse(dest)
+    except:
+        speech_output = "Failure occured while connecting, please try again."
+    
+    return build_response(session_attributes, build_speechlet_response(
+        card_title, speech_output, reprompt_text, should_end_session))
+
+
 
 def send_request(intent, session):
-    """ Sets the color in the session and prepares the speech to reply to the
-    user.
-    """
+    """Sends a Request for Debugging Purposes"""
     card_title = intent['name']
     session_attributes = {}
     should_end_session = False
@@ -361,8 +347,8 @@ def on_intent(intent_request, session):
         return move_app(intent, session)
     elif intent_name == "searchApplication":
         return search_app(intent, session)
-    # elif intent_name == "WhatsMyColorIntent":
-    #     return get_color_from_session(intent, session)
+    elif intent_name == "traverse":
+        return traverse(intent, session)
     elif intent_name == "AMAZON.HelpIntent":
         return get_welcome_response()
     elif intent_name == "AMAZON.CancelIntent" or intent_name == "AMAZON.StopIntent":

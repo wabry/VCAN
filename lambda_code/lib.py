@@ -6,7 +6,7 @@ from collections import OrderedDict
 
 class Request(object):
     def __init__(self):
-        self.hostname = "chaffiest-budgerigar-7836.dataplicity.io"
+        self.hostname = "cockneyish-peacock-7451.dataplicity.io"
         self.path = "/api/alexa/v1/"
 
     def send_request(self, http_method, action, params):
@@ -22,17 +22,15 @@ class Entity(Request):
         Request.__init__(self)
         self.entity_type = entity_type
 
-
     def send_request(self, http_method, action, params):
         super(Entity, self).send_request(http_method, self.entity_type + action, params)
 
 class Traverse(Request):
-    def __init__(self, dest):
+    def __init__(self):
         Request.__init__(self)
-        self.dest = dest
 
-    def traverse():
-        params = urllib.urlencode({"name": self.dest})
+    def traverse(self, dest):
+        params = urllib.urlencode({"name": dest})
         return self.send_request("POST", "traverse", params)
 
 

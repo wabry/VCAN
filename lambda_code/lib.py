@@ -6,13 +6,14 @@ from collections import OrderedDict
 
 class Request(object):
     def __init__(self):
-        self.hostname = "cockneyish-peacock-7451.dataplicity.io"
+        self.hostname = "67.205.149.226"
+        self.port = 8080
         self.path = "/api/alexa/v1/"
 
     def send_request(self, http_method, action, params):
         headers = {}
-        conn = httplib.HTTPSConnection(self.hostname + ":443") 
-        conn.request(http_method, self.path + action + params, {}, headers)
+        conn = httplib.HTTPConnection(self.hostname, self.port)
+        conn.request(http_method, self.path + action + params, "", headers)
         response = conn.getresponse()
         return response
 
@@ -25,13 +26,35 @@ class Entity(Request):
     def send_request(self, http_method, action, params):
         super(Entity, self).send_request(http_method, self.entity_type + action, params)
 
+class Screen(Request):
+    def __init__(self):
+        Request.__init__(self)
+
+    def switch_screen(self, type):
+        params = urllib.urlencode({"type": type})
+        return self.send_request("POST", "screen/", params) 
+
+
+class AppStore(Entity):
+    def __init__(self):
+        Entity.__init__(self, "appStore/")
+
+    def category_select(self, index):
+        params = urllib.urlencode({"index": index})
+        return self.send_request("POST", "category/", params)
+
+    def app_select(self, index):
+        params = urllib.urlencode({"index": index})
+        return self.send_request("POST", "app/", params)
+
+
 class Traverse(Request):
     def __init__(self):
         Request.__init__(self)
 
     def traverse(self, dest):
-        params = urllib.urlencode({"name": dest})
-        return self.send_request("POST", "traverse", params)
+        params = urllib.urlencode({"dest": dest})
+        return self.send_request("POST", "traverse/", params)
 
 
 class Debug(Request):
@@ -59,14 +82,17 @@ class App(Entity):
         
 
     def move(self, name, dest):
-        params = urllib.urlencode(OrderedDict([("name", name), ("folder", dest)]))
+        params = urllib.urlencode(OrderedDict([("name", name), ("destFolder", dest)]))
         return self.send_request("POST", "move/", params)
         
 
     def search(self, query):
         params = urllib.urlencode({"query": query})
         return self.send_request("GET", "", params)
-
+        
+    def populate(self):
+        params = urllib.urlencode({})
+        return self.send_request("POST", "", params)
 
 class Folder(Entity):
     def __init__(self):

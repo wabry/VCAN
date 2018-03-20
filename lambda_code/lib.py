@@ -71,8 +71,8 @@ class App(Entity):
         Entity.__init__(self, "app/")
         
         
-    def add(self, name):
-        params = urllib.urlencode({"name": name})
+    def add(self, index):
+        params = urllib.urlencode({"index": index})
         return self.send_request("POST", "", params)
 
 

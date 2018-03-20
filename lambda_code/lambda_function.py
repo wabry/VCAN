@@ -204,10 +204,11 @@ def add_app(intent, session):
     speech_output = "Success" # do we need this?
     reprompt_text = ""
     should_end_session = False
+    index = intent["slots"]["index"]["value"]
    
     app = App()
     try:
-        app.add("Open AppStore :)")
+        app.add(index)
     except:
         speech_output = "Failure occured while connecting, please try again."
     

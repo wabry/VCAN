@@ -156,7 +156,7 @@ router.delete('/app/:name', function(req, res, next) {
 router.post('/traverse/:dest', function(req,res,next) {
 	// Go to the correct destination
 	var destination = adjustName(req.params.dest);
-	if(destination == 'UP')
+	if(destination == 'up')
 	{
 		state.stateModule.traverseUp();
 	}
@@ -173,9 +173,9 @@ router.post('/traverse/:dest', function(req,res,next) {
 router.post('/screen/:name', function(req, res, next) {
 	// Get the type to swap to
 	var type = adjustName(req.params.name);
-	if (type == 'apps') {
+	if (type == 'filesystem') {
 		// Switch to app view
-		state.stateModule.updatePage('Apps');
+		state.stateModule.updatePage('Filesystem');
 	}
 	else if (type == 'store') {
 		// Switch to store view, starting at the categories
@@ -222,10 +222,38 @@ router.post('/appStore/category/:index', function(req, res, next) {
 
 /* Download an app */
 router.post('/appStore/app/:index', function(req, res, next) {
-	// Get the app index
+	// Get the inputted index
 	var appIndex = adjustName(req.params.index);
-	// Download the app
-
+	// Get the categories list to find the correct category name
+	var cat_options = {
+		mode: 'json'
+	};
+	// Get the specific category from the python scraper
+	PythonShell.run('/scraper/categories.py', cat_options, function (cat_err, categories) {
+		if (cat_err) throw cat_err;
+		console.log("*************");
+		// Get the category
+		for(var i=0;i<categories[0].length;i++)
+		{
+			if(categories[0][i].name == state.stateModule.getStoreView())
+			{
+				var category = categories[0][i];
+				console.log(category);
+				// Get the app list
+				var app_options = {
+					mode: 'json',
+					args: [category.url]
+				};
+				PythonShell.run('/scraper/skill_info.py', app_options, function (apps_err, apps) {
+					if (apps_err) throw apps_err;
+					// Add the app at app index to the downloads
+					var appName = apps[0][appIndex].name;
+					state.stateModule.addAppToDownloads(appName);
+				});
+			}
+		}
+	});
+	console.log("*************");
 	// Log transaction
 	state.stateModule.appendToLog(Date(),'Downloaded app with index ' + appIndex);
 	res.end();
@@ -279,7 +307,6 @@ function updateApps(categoryIndex) {
 		PythonShell.run('/scraper/skill_info.py', app_options, function (apps_err, apps) {
 			if (apps_err) throw apps_err;
 			// Update the state module
-			console.log(apps[0]);
 			state.stateModule.updatePage('StoreSkills');
 			state.stateModule.changeAppView(category.name, apps[0]);
 		});

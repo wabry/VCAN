@@ -124,6 +124,10 @@ var stateModule = (function() {
         // Add the folder to the right place in the db
         dbWrapper.addApp(appName,destFolder);    // async
     };
+    pub.addAppToDownloads = function (appName) {
+        // Add the app to the database
+        dbWrapper.addApp(appName,'downloads');    // async
+    };
     // Get all apps from the app list
     pub.getApps = function() {
         dbWrapper.getApps(currentFolder,pub.getAppsCb);

@@ -1,4 +1,4 @@
-// This file controls the current state of the file system at any given time
+// This file controls the current state of the system at any given time
 // TODO - Add exceptions/error handling
 // TODO - Add functionality for path and folder
 var dbWrapper = require('./dbWrapper'); // Add to interact with the database
@@ -6,14 +6,73 @@ var dbWrapper = require('./dbWrapper'); // Add to interact with the database
 var stateModule = (function() {
     // State of transactions
     var log = [];
+    // Type of the page we are currently on
+    var pageName = 'Home';
     // State of the filesystem
     var path = '~';               // Current path of the system
     var parentFolder = 'root';        // Current parent directory, initialized to nothing
     var currentFolder = 'root';   // Current directory, initialized to root, has no parent
     var folders = [];             // Folders in current directory
     var apps = [];                // Apps in current directory
+    // State of the store view
+    var storeView = 'Categories';
+    var categoryList = [];
+    var storeAppNames = [];
+    var storeAppUtterance = [];
+    var storeAppDeveloper = [];
+    var storeAppImage = [];
 
     var pub = {};   // public object - returned at end of module
+
+    /* Functions to edit the page name */
+    pub.updatePage = function(pageType) {
+        pageName = pageType;
+    };
+    pub.getPageName = function() {
+        return pageName;
+    };
+
+    /* Functions to handle store view perspective */
+    pub.changeCategoryView = function(storeName, newCategoryList) {
+        storeView = storeName;
+        categoryList = [];
+        for(var i=0; i<newCategoryList.length;i++) {
+            categoryList.push(newCategoryList[i].name);
+        }
+    };
+
+    pub.changeAppView = function(storeName, newAppList) {
+        storeView = storeName;
+        storeAppNames = [];
+        storeAppUtterance = [];
+        storeAppDeveloper = [];
+        storeAppImage = [];
+        for(var i=0; i<newAppList.length;i++) {
+            storeAppNames.push(newAppList[i].name);
+            storeAppUtterance.push(newAppList[i].utterance);
+            storeAppDeveloper.push(newAppList[i].developer);
+            storeAppImage.push(newAppList[i].image);
+        }
+    };
+
+    pub.getStoreView = function() {
+        return storeView;
+    };
+    pub.getCategories = function() {
+        return categoryList;
+    };
+    pub.getStoreAppNames = function() {
+        return storeAppNames;
+    };
+    pub.getStoreAppUtterance = function() {
+        return storeAppUtterance;
+    };
+    pub.getStoreAppDeveloper = function() {
+        return storeAppDeveloper;
+    };
+    pub.getStoreAppImage = function() {
+        return storeAppImage;
+    };
 
     /* Callback functions */
     pub.getAppsCb = function(dbApps) {
@@ -28,7 +87,6 @@ var stateModule = (function() {
             folders.push(dbFolders[i].name);
         }
     };
-
     pub.getParentCb = function(dbParent) {
         // Update the folders
         currentFolder = parentFolder;

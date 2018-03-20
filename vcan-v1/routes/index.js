@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var state = require('../stateModule');
 var dbWrapper = require('../dbWrapper');
+var PythonShell = require('python-shell');
 
 /* State handling for angular interaction */
 let response = {
@@ -12,17 +13,42 @@ let response = {
 };
 
 /* Get the current state, used by angular front end */
-router.get('/state', function(req, res, next) {
+router.get('/state/page', function(req, res, next) {
+	response.pageName = state.stateModule.getPageName();
+	res.json(response);
+});
+router.get('/state/path', function(req, res, next) {
 	response.path = state.stateModule.getPath();
+	res.json(response);
+});
+router.get('/state/apps', function(req, res, next) {
 	response.apps = state.stateModule.getApps();
+	res.json(response);
+});
+router.get('/state/folders', function(req, res, next) {
 	response.folders = state.stateModule.getFolders();
+	res.json(response);
+});
+router.get('/state/storeView', function(req, res, next) {
+	response.title = state.stateModule.getStoreView();
+	res.json(response);
+});
+router.get('/state/categories', function(req, res, next) {
+	response.categories = state.stateModule.getCategories();
+	res.json(response);
+});
+router.get('/state/appList', function(req, res, next) {
+	response.apps = state.stateModule.getStoreAppNames();
+	response.utterances = state.stateModule.getStoreAppUtterance();
+	response.developers = state.stateModule.getStoreAppDeveloper();
+	response.images = state.stateModule.getStoreAppImage();
 	res.json(response);
 });
 
 /* Display all of the recent actions completed */
 router.get('/log', function(req, res, next) {
 	var recentLog = state.stateModule.getLog();
-	res.render('index', { log: recentLog });
+	res.render('log', { log: recentLog });
 });
 
 /* Search for a folder */
@@ -142,6 +168,123 @@ router.post('/traverse/:dest', function(req,res,next) {
 	state.stateModule.appendToLog(Date(),'Traverse: ' + destination);
 	res.end();
 });
+
+/* Swap between the apps page and the apps store */
+router.post('/screen/:name', function(req, res, next) {
+	// Get the type to swap to
+	var type = adjustName(req.params.name);
+	if (type == 'apps') {
+		// Switch to app view
+		state.stateModule.updatePage('Apps');
+	}
+	else if (type == 'store') {
+		// Switch to store view, starting at the categories
+		updateCategories();
+		state.stateModule.updatePage('StoreCategories');
+	}
+	else if (type == 'home') {
+		// Switch to home view
+		state.stateModule.updatePage('Home');
+	}
+	else if (type == 'help') {
+		// Switch to help view
+		state.stateModule.updatePage('Help');
+	}
+	// Log transaction
+	state.stateModule.appendToLog(Date(),'Swapped screens to ' + type);
+	res.end();
+});
+
+/* Dive into a category in the store view */
+router.post('/appStore/:category', function(req, res, next) {
+	// Get the category index
+	var categoryIndex = adjustName(req.params.category);
+	// Only accept these requests if we are in the Categories page
+	if(state.stateModule.getStoreView() == 'Categories' || categoryIndex == -1)
+	{
+		// If index = -1 then move up to the parent category view & update the view
+		if(categoryIndex == -1) {
+			// Update the categories
+			updateCategories();
+			// Log transaction
+			state.stateModule.appendToLog(Date(),'Switched to main category view');
+		}
+		// Otherwise, get the list of categories and select what to enter
+		else if (categoryIndex >= 0 && categoryIndex <= 22) {
+			// Update the apps of that category
+			updateApps(categoryIndex);
+			// Log transaction
+			state.stateModule.appendToLog(Date(),'Entered category ' + categoryName);
+		}
+	}
+	res.end();
+});
+
+/* Download an app */
+router.post('/appStore/:app', function(req, res, next) {
+	// Get the app index
+	var appIndex = adjustName(req.params.category);
+	// Download the app
+
+	// Log transaction
+	state.stateModule.appendToLog(Date(),'Downloaded app with index ' + appIndex);
+	res.end();
+});
+
+/* Add all downloaded apps on alexa to our page */
+router.post('/app/populate', function(req, res, next) {
+	// Populate all of our downloaded apps - TODO implement this
+
+	// Log transaction
+	state.stateModule.appendToLog(Date(),'Populated apps');
+	res.end();
+});
+
+// Helper function to update the categories in the system state
+function updateCategories() {
+	// Define the options and arguments for the call to the python scraper
+	var options = {
+		mode: 'json'
+	};
+	// Get the category list from the python shell
+	PythonShell.run('/scraper/categories.py', options, function (err, results) {
+		if (err) throw err;
+		var categories = results[0];
+		var categoryNames = [];
+		for(var i=0;i<categories.length;i++)
+		{
+			categoryNames.push(categories[i]);
+		}
+		state.stateModule.updatePage('StoreCategories');
+		state.stateModule.changeCategoryView('Categories',categoryNames);
+	});
+}
+
+// Helper function to get a list of skills under a specific URL
+function updateApps(categoryIndex) {
+	// Get the categories list to find the correct category name
+	var cat_options = {
+		mode: 'json'
+	};
+	// Get the specific category from the python scraper
+	PythonShell.run('/scraper/categories.py', cat_options, function (cat_err, categories) {
+		if (cat_err) throw cat_err;
+		// Get the category
+		var category = categories[0][categoryIndex];
+		// Update the apps with the apps in this category
+		var app_options = {
+			mode: 'json',
+			args: [category.url]
+		};
+		PythonShell.run('/scraper/skill_info.py', app_options, function (apps_err, apps) {
+			if (apps_err) throw apps_err;
+			// Update the state module
+			console.log(apps[0]);
+			state.stateModule.updatePage('StoreSkills');
+			state.stateModule.changeAppView(category.name, apps[0]);
+		});
+	});
+}
 
 // Helper to adjust an inputted name
 function adjustName(name) {

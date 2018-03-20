@@ -1,399 +1,411 @@
 <head>
-<style>
-body{
-	margin:0;
-	color:#444;
-	background:#f9ecb7;
-	font:300 18px/18px Roboto, sans-serif;
-}
-*,:after,:before{box-sizing:border-box}
-.pull-left{float:left}
-.pull-right{float:right}
-.clearfix:after,.clearfix:before{content:'';display:table}
-.clearfix:after{clear:both;display:block}
-
-.cloud .line-c:before,
-.cloud .line-c:after,
-.toucan .body .wing:before,
-.toucan .body .wing:after,
-.toucan .tail:before,
-.toucan .tail:after,
-.toucan .legs span:before,
-.toucan .legs span:after,
-.toucan .wood .leaf:before,
-.toucan .wood .leaf:after,
-.toucan .head .peak:before,
-.toucan .head .peak:after,
-.toucan .head .eye-wrap:before,
-.toucan .head .eye-wrap:after,
-.toucan .body .chest:after{
-	content:'';
-	position:absolute;
-}
-
-.toucan{
-	width:270px;
-	height:365px;
-	padding-left:75px;
-	position:relative;
-	margin:50px auto 0;
-}
-
-.cloud{
-	left:50%;
-	width:260px;
-	bottom:70px;
-	overflow:hidden;
-	position:absolute;
-	margin-left:-130px;
-}
-.cloud .line-a,
-.cloud .line-b,
-.cloud .line-c,
-.cloud .line-d{
-	height:30px;
-	width:100%;
-	background:#fff;
-	position:relative;
-	border-radius:15px;
-}
-.cloud .line-c:before,
-.cloud .line-c:after{
-	height:inherit;
-	width:inherit;
-	background:#f9ecb7;
-	border-radius:inherit;
-}
-.cloud .line-a,
-.cloud .line-d{
-	width:135px;
-}
-.cloud .line-c{
-	height:10px;
-}
-.cloud .line-a{
-	left:90px;
-}
-.cloud .line-d{
-	left:45px;
-}
-.cloud .line-c:before{
-	top:0;
-	left:0;
-	width:65px;
-}
-.cloud .line-c:after{
-	top:0;
-	right:0;
-	width:130px;
-}
-
-.toucan .head{
-	height:75px;
-	width:195px;
-	overflow:hidden;
-	position:relative;
-	background:#f0922e;
-	border-radius:60px 75px 0 0;
-}
-.toucan .head .top{
-	left:-10px;
-	width:80px;
-	height:80px;
-	background:#000;
-	position:absolute;
-	border-radius:0 50% 50% 0;
-}
-.toucan .head .peak{
-	bottom:0;
-	height:15px;
-	width:inherit;
-	background:#000;
-	position:absolute;
-}
-.toucan .head .peak:before{
-	right:5px;
-	bottom:0;
-	z-index:2;
-	width:120px;
-	height:15px;
-	position:absolute;
-	background:#ee5e2c;
-	transform:skewX(35deg);
-	border-radius:0 40px 0 0;
-}
-.toucan .head .peak:after{
-	top:-35px;
-	z-index:1;
-	width:80px;
-	right:-35px;
-	height:80px;
-	background:#000;
-	border-radius:50%;
-}
-.toucan .head .eye-wrap{
-	left:15px;
-	width:45px;
-	height:55px;
-	bottom:-10px;
-	overflow:hidden;
-	position:absolute;
-	background:#b6dbf5;
-	transform:rotate(-18deg);
-	border-radius:40px 0 0 0;
-}
-.toucan .head .eye-wrap:before{
-	left:0;
-	width:50px;
-	height:15px;
-	bottom:8px;
-	background:#fff;
-	transform:rotate(20deg);
-}
-.toucan .head .eye-wrap:after{
-	top:5px;
-	left:20px;
-	width:20px;
-	height:20px;
-	background:#000;
-	border-radius:50%;
-	border:5px solid #1381b2;
-}
-.toucan .body{
-	width:85px;
-	height:160px;
-	background:#000;
-	position:relative;
-	border-radius:0 0 38px 38px;
-}
-.toucan .body .chest{
-	top:0;
-	right:0;
-	width:65px;
-	height:65px;
-	overflow:hidden;
-	position:absolute;
-}
-.toucan .body .chest:after{
-	left:11px;
-	bottom:8px;
-	width:80px;
-	height:80px;
-	background:#fff;
-	transform:rotate(-25deg);
-	border-radius:0 0 0 55px;
-}
-.toucan .body .wing{
-	width:40px;
-	height:155px;
-	overflow:hidden;
-	position:absolute;
-}
-.toucan .body .wing.left{
-	right:100%;
-}
-.toucan .body .wing.right{
-	left:100%;
-}
-
-.toucan .body .wing.right:before,
-.toucan .body .wing.left:after{
-	width:1px;
-	bottom:3px;
-	background:#6d674f;
-}
-.toucan .body .wing.right:before{
-	left:0;
-	z-index:2;
-	height:100%;
-}
-.toucan .body .wing.right:after{
-	top:-1px;
-	right:0;
-	width:100px;
-	height:155px;
-	background:#000;
-	border-radius:50%;
-}
-.toucan .body .wing.left:before{
-	top:-1x;
-	left:0;
-	width:100px;
-	height:155px;
-	background:#000;
-	border-radius:50%;
-}
-.toucan .body .wing.left:after{
-	right:0;
-	z-index:2;
-	height:100px;
-}
-.toucan .tail{
-	width:60px;
-	height:138px;
-	margin-left:10px;
-	perspective:200px;
-	position:relative;
-}
-.toucan .tail:before,
-.toucan .tail:after{
-	bottom:0;
-	width:30px;
-	height:200px;
-	background:#000;
-	transform:rotateX(45deg);
-}
-.toucan .tail:before{
-	right:0;
-	border-radius:0 0 20px 0;
-}
-.toucan .tail:after{
-	left:0;
-	border-radius:0 0 0 20px;
-}
-.toucan .wood{
-	left:50%;
-	top:-8px;
-	z-index:1;
-	width:300px;
-	height:200px;
-	border-radius:50%;
-	position:absolute;
-	margin-left:-150px;
-	border:8px solid transparent;
-	border-top-color:#614a38;
-}
-.toucan .wood .leaf{
-	right:35px;
-	top:-35px;
-	width:25px;
-	height:35px;
-	overflow:hidden;
-	position:absolute;
-	background:#82c341;
-	border-radius:30px 0;
-	transform:rotate(-20deg);
-}
-.toucan .legs{
-	width:100%;
-	height:25px;
-	bottom:15px;
-	position:relative;
-}
-.toucan .legs span{
-	z-index:2;
-	width:8px;
-	display:block;
-	height:inherit;
-	position:absolute;
-}
-.toucan .legs span:before,
-.toucan .legs span:after{
-	top:0;
-	width:8px;
-	height:inherit;
-	border-radius:5px;
-	background:#f0922e;
-}
-.toucan .legs .left{
-	left:2px;
-}
-.toucan .legs .right{
-	right:2px;
-}
-.toucan .legs .left:after{
-	left:10px;
-}
-.toucan .legs .right:after{
-	right:10px;
-}
-
-h1 {
-	border-style: ridge;
-    color: black;
-    text-align: center;
-    text-shadow: 0 0 5px gray, 0 0 5px darkgray;
-}
-
-h4 {
-    color: black;
-    text-align: center;
-}
-
-h2 {
-    text-shadow: 1px 1px 2px #000000;
-    color: black;
-    text-align: center;
-}
-
-h3 {
-    text-shadow: 1px 1px 2px #000000;
-    color: black;
-    text-align: center;
-}
-
-ul {
-    color: black;
-    text-align: center;
-    list-style: none;
-}
-
-li {
-    color: black;
-    text-align: center;
-    margin-left: -35px;
-}
-
-p {
-    color: black;
-    text-align: center;
-    font-family: verdana;
-    font-size: 10px;
-}
-
-</style>
-</head>
-<body>
-<h1 style="font-family:verdana;">Voice Controlled Assisted Navigation</h1>
-
-<h2>Current Path: {{ path }}</h2>
-<h3>Apps</h3>
-<ul>
-  <li *ngFor="let app of apps">{{ app }}</li>
-</ul>
-<h3>Folders</h3>
-<ul>
-  <li *ngFor="let folder of folders">{{ folder }}</li>
-</ul>
-
-
-<div class="toucan">
-    <div class="cloud">
-      <div class="line-a"></div>
-      <div class="line-b"></div>
-      <div class="line-c"></div>
-      <div class="line-d"></div>
-    </div>
-    <div class="head">
-      <div class="top"></div>
-      <div class="peak"></div>
-      <div class="eye-wrap">
-        <div class="retina"></div>
-      </div>
-    </div>
-    <div class="body">
-      <div class="chest"></div>
-      <div class="wing left"></div>
-      <div class="wing right"></div>
-    </div>
-    <div class="tail">
-      <div class="wood"><span class="leaf"></span></div>
-      <div class="legs">
-        <span class="left"></span>
-        <span class="right"></span>
-      </div>
-    </div>
-  </div>
-</body>
-<p>By William Bryant, Andrew Katcha, Caleb Boyer, and Josh Knill</p>
-
+		<style>
+		body{
+			margin:0;
+			color:#444;
+			background:#f9ecb7;
+			font:300 18px/18px Roboto, sans-serif;
+		}
+		*,:after,:before{box-sizing:border-box}
+		.pull-left{float:left}
+		.pull-right{float:right}
+		.clearfix:after,.clearfix:before{content:'';display:table}
+		.clearfix:after{clear:both;display:block}
+		
+		.cloud .line-c:before,
+		.cloud .line-c:after,
+		.toucan .body .wing:before,
+		.toucan .body .wing:after,
+		.toucan .tail:before,
+		.toucan .tail:after,
+		.toucan .legs span:before,
+		.toucan .legs span:after,
+		.toucan .wood .leaf:before,
+		.toucan .wood .leaf:after,
+		.toucan .head .peak:before,
+		.toucan .head .peak:after,
+		.toucan .head .eye-wrap:before,
+		.toucan .head .eye-wrap:after,
+		.toucan .body .chest:after{
+			content:'';
+			position:absolute;
+		}
+		
+		.toucan{
+			width:270px;
+			height:365px;
+			padding-left:75px;
+			position:relative;
+			margin:50px auto 0;
+		}
+		
+		.cloud{
+			left:50%;
+			width:260px;
+			bottom:70px;
+			overflow:hidden;
+			position:absolute;
+			margin-left:-130px;
+		}
+		.cloud .line-a,
+		.cloud .line-b,
+		.cloud .line-c,
+		.cloud .line-d{
+			height:30px;
+			width:100%;
+			background:#fff;
+			position:relative;
+			border-radius:15px;
+		}
+		.cloud .line-c:before,
+		.cloud .line-c:after{
+			height:inherit;
+			width:inherit;
+			background:#f9ecb7;
+			border-radius:inherit;
+		}
+		.cloud .line-a,
+		.cloud .line-d{
+			width:135px;
+		}
+		.cloud .line-c{
+			height:10px;
+		}
+		.cloud .line-a{
+			left:90px;
+		}
+		.cloud .line-d{
+			left:45px;
+		}
+		.cloud .line-c:before{
+			top:0;
+			left:0;
+			width:65px;
+		}
+		.cloud .line-c:after{
+			top:0;
+			right:0;
+			width:130px;
+		}
+		
+		.toucan .head{
+			height:75px;
+			width:195px;
+			overflow:hidden;
+			position:relative;
+			background:#f0922e;
+			border-radius:60px 75px 0 0;
+		}
+		.toucan .head .top{
+			left:-10px;
+			width:80px;
+			height:80px;
+			background:#000;
+			position:absolute;
+			border-radius:0 50% 50% 0;
+		}
+		.toucan .head .peak{
+			bottom:0;
+			height:15px;
+			width:inherit;
+			background:#000;
+			position:absolute;
+		}
+		.toucan .head .peak:before{
+			right:5px;
+			bottom:0;
+			z-index:2;
+			width:120px;
+			height:15px;
+			position:absolute;
+			background:#ee5e2c;
+			transform:skewX(35deg);
+			border-radius:0 40px 0 0;
+		}
+		.toucan .head .peak:after{
+			top:-35px;
+			z-index:1;
+			width:80px;
+			right:-35px;
+			height:80px;
+			background:#000;
+			border-radius:50%;
+		}
+		.toucan .head .eye-wrap{
+			left:15px;
+			width:45px;
+			height:55px;
+			bottom:-10px;
+			overflow:hidden;
+			position:absolute;
+			background:#b6dbf5;
+			transform:rotate(-18deg);
+			border-radius:40px 0 0 0;
+		}
+		.toucan .head .eye-wrap:before{
+			left:0;
+			width:50px;
+			height:15px;
+			bottom:8px;
+			background:#fff;
+			transform:rotate(20deg);
+		}
+		.toucan .head .eye-wrap:after{
+			top:5px;
+			left:20px;
+			width:20px;
+			height:20px;
+			background:#000;
+			border-radius:50%;
+			border:5px solid #1381b2;
+		}
+		.toucan .body{
+			width:85px;
+			height:160px;
+			background:#000;
+			position:relative;
+			border-radius:0 0 38px 38px;
+		}
+		.toucan .body .chest{
+			top:0;
+			right:0;
+			width:65px;
+			height:65px;
+			overflow:hidden;
+			position:absolute;
+		}
+		.toucan .body .chest:after{
+			left:11px;
+			bottom:8px;
+			width:80px;
+			height:80px;
+			background:#fff;
+			transform:rotate(-25deg);
+			border-radius:0 0 0 55px;
+		}
+		.toucan .body .wing{
+			width:40px;
+			height:155px;
+			overflow:hidden;
+			position:absolute;
+		}
+		.toucan .body .wing.left{
+			right:100%;
+		}
+		.toucan .body .wing.right{
+			left:100%;
+		}
+		
+		.toucan .body .wing.right:before,
+		.toucan .body .wing.left:after{
+			width:1px;
+			bottom:3px;
+			background:#6d674f;
+		}
+		.toucan .body .wing.right:before{
+			left:0;
+			z-index:2;
+			height:100%;
+		}
+		.toucan .body .wing.right:after{
+			top:-1px;
+			right:0;
+			width:100px;
+			height:155px;
+			background:#000;
+			border-radius:50%;
+		}
+		.toucan .body .wing.left:before{
+			top:-1x;
+			left:0;
+			width:100px;
+			height:155px;
+			background:#000;
+			border-radius:50%;
+		}
+		.toucan .body .wing.left:after{
+			right:0;
+			z-index:2;
+			height:100px;
+		}
+		.toucan .tail{
+			width:60px;
+			height:138px;
+			margin-left:10px;
+			perspective:200px;
+			position:relative;
+		}
+		.toucan .tail:before,
+		.toucan .tail:after{
+			bottom:0;
+			width:30px;
+			height:200px;
+			background:#000;
+			transform:rotateX(45deg);
+		}
+		.toucan .tail:before{
+			right:0;
+			border-radius:0 0 20px 0;
+		}
+		.toucan .tail:after{
+			left:0;
+			border-radius:0 0 0 20px;
+		}
+		.toucan .wood{
+			left:50%;
+			top:-8px;
+			z-index:1;
+			width:300px;
+			height:200px;
+			border-radius:50%;
+			position:absolute;
+			margin-left:-150px;
+			border:8px solid transparent;
+			border-top-color:#614a38;
+		}
+		.toucan .wood .leaf{
+			right:35px;
+			top:-35px;
+			width:25px;
+			height:35px;
+			overflow:hidden;
+			position:absolute;
+			background:#82c341;
+			border-radius:30px 0;
+			transform:rotate(-20deg);
+		}
+		.toucan .legs{
+			width:100%;
+			height:25px;
+			bottom:15px;
+			position:relative;
+		}
+		.toucan .legs span{
+			z-index:2;
+			width:8px;
+			display:block;
+			height:inherit;
+			position:absolute;
+		}
+		.toucan .legs span:before,
+		.toucan .legs span:after{
+			top:0;
+			width:8px;
+			height:inherit;
+			border-radius:5px;
+			background:#f0922e;
+		}
+		.toucan .legs .left{
+			left:2px;
+		}
+		.toucan .legs .right{
+			right:2px;
+		}
+		.toucan .legs .left:after{
+			left:10px;
+		}
+		.toucan .legs .right:after{
+			right:10px;
+		}
+		
+		h1 {
+			border-style: ridge;
+			color: black;
+			text-align: center;
+			text-shadow: 0 0 5px gray, 0 0 5px darkgray;
+		}
+		
+		h4 {
+			color: black;
+			text-align: center;
+		}
+		
+		h2 {
+			text-shadow: 1px 1px 2px #000000;
+			color: black;
+			text-align: center;
+		}
+		
+		h3 {
+			text-shadow: 1px 1px 2px #000000;
+			color: black;
+			text-align: center;
+		}
+		
+		ul {
+			color: black;
+			text-align: center;
+			list-style: none;
+		}
+		
+		li {
+			color: black;
+			text-align: center;
+			margin-left: -35px;
+		}
+		
+		p {
+			color: black;
+			text-align: center;
+			font-family: verdana;
+			font-size: 10px;
+		}
+		
+		</style>
+		</head>
+		<body>
+		<h1 style="font-family:verdana;">Voice Controlled Assisted Navigation</h1>
+		
+		<h2>Current Page: {{ pageName }}</h2>
+		<h2>Current View: {{ storeView }}</h2>
+		<h3>Categories</h3>
+		<ul>
+		  <li *ngFor="let cat of categoryList">{{ cat }}</li>
+		</ul>
+		<h3>Apps</h3>
+		<ul>
+		  <li *ngFor="let app of storeAppNames">{{ app }}</li>
+		</ul>
+		
+		<!--
+		<h2>Current Path: {{ path }}</h2>
+		<h3>Apps</h3>
+		<ul>
+		  <li *ngFor="let app of apps">{{ app }}</li>
+		</ul>
+		<h3>Folders</h3>
+		<ul>
+		  <li *ngFor="let folder of folders">{{ folder }}</li>
+		</ul>
+		-->
+		
+		<div class="toucan">
+			<div class="cloud">
+			  <div class="line-a"></div>
+			  <div class="line-b"></div>
+			  <div class="line-c"></div>
+			  <div class="line-d"></div>
+			</div>
+			<div class="head">
+			  <div class="top"></div>
+			  <div class="peak"></div>
+			  <div class="eye-wrap">
+				<div class="retina"></div>
+			  </div>
+			</div>
+			<div class="body">
+			  <div class="chest"></div>
+			  <div class="wing left"></div>
+			  <div class="wing right"></div>
+			</div>
+			<div class="tail">
+			  <div class="wood"><span class="leaf"></span></div>
+			  <div class="legs">
+				<span class="left"></span>
+				<span class="right"></span>
+			  </div>
+			</div>
+		  </div>
+		</body>
+		<p>By William Bryant, Andrew Katcha, Caleb Boyer, and Josh Knill</p>
+		

@@ -98,7 +98,7 @@ def create_folder(intent, session):
     
     session_attributes = {}
     card_title = intent['name']
-    speech_output = "Success" # do we need this?
+    speech_output = "" # do we need this?
     reprompt_text = ""
     should_end_session = False
     folder_name = intent["slots"]["folderName"]["value"]
@@ -118,7 +118,7 @@ def delete_folder(intent, session):
     
     session_attributes = {}
     card_title = intent['name']
-    speech_output = "Success" # do we need this?
+    speech_output = "" # do we need this?
     reprompt_text = ""
     should_end_session = False
     folder_name = intent["slots"]["folderName"]["value"]
@@ -138,7 +138,7 @@ def move_folder(intent, session):
     
     session_attributes = {}
     card_title = intent['name']
-    speech_output = "Success" # do we need this?
+    speech_output = "" # do we need this?
     reprompt_text = ""
     should_end_session = False
     folder_name = intent["slots"]["folderName"]["value"]
@@ -159,7 +159,7 @@ def search_folder(intent, session):
     
     session_attributes = {}
     card_title = intent['name']
-    speech_output = "Success" # do we need this?
+    speech_output = "" # do we need this?
     reprompt_text = ""
     should_end_session = False
     folder_name = intent["slots"]["folderName"]["value"]
@@ -179,7 +179,7 @@ def rename_folder(intent, session):
     
     session_attributes = {}
     card_title = intent['name']
-    speech_output = "Success" # do we need this?
+    speech_output = "" # do we need this?
     reprompt_text = ""
     should_end_session = False
     old_name = intent["slots"]["oldName"]["value"]
@@ -201,7 +201,7 @@ def add_app(intent, session):
     
     session_attributes = {}
     card_title = intent['name']
-    speech_output = "Success" # do we need this?
+    speech_output = "" # do we need this?
     reprompt_text = ""
     should_end_session = False
     index = intent["slots"]["index"]["value"]
@@ -221,7 +221,7 @@ def delete_app(intent, session):
     
     session_attributes = {}
     card_title = intent['name']
-    speech_output = "Success" # do we need this?
+    speech_output = "" # do we need this?
     reprompt_text = ""
     should_end_session = False
     app_name = intent["slots"]["appName"]["value"]
@@ -241,7 +241,7 @@ def move_app(intent, session):
     
     session_attributes = {}
     card_title = intent['name']
-    speech_output = "Success" # do we need this?
+    speech_output = "" # do we need this?
     reprompt_text = ""
     should_end_session = False
     app_name = intent["slots"]["appName"]["value"]
@@ -262,7 +262,7 @@ def search_app(intent, session):
     
     session_attributes = {}
     card_title = intent['name']
-    speech_output = "Success" # do we need this?
+    speech_output = "" # do we need this?
     reprompt_text = ""
     should_end_session = False
     app_name = intent["slots"]["appName"]["value"]
@@ -282,7 +282,7 @@ def traverse(intent, session):
 
     session_attributes = {}
     card_title = intent['name']
-    speech_output = "Success" # do we need this?
+    speech_output = "" # do we need this?
     reprompt_text = ""
     should_end_session = False
     dest = intent["slots"]["dest"]["value"]
@@ -301,7 +301,7 @@ def switch_screen(intent, session):
     """Switches the screen between App Store and apps page"""
     session_attributes = {}
     card_title = intent['name']
-    speech_output = "Success" # do we need this?
+    speech_output = "" # do we need this?
     reprompt_text = ""
     should_end_session = False
     type = intent["slots"]["type"]["value"]
@@ -319,7 +319,7 @@ def app_index(intent, session):
     """Input the index of the app a user wants to visit"""
     session_attributes = {}
     card_title = intent['name']
-    speech_output = "Success" # do we need this?
+    speech_output = "" # do we need this?
     reprompt_text = ""
     should_end_session = False
     index = intent["slots"]["index"]["value"]
@@ -338,7 +338,7 @@ def category_index(intent, session):
     """Input the index of the category a user wants to visit"""
     session_attributes = {}
     card_title = intent['name']
-    speech_output = "Success" # do we need this?
+    speech_output = "" # do we need this?
     reprompt_text = ""
     should_end_session = False
     index = intent["slots"]["index"]["value"]
@@ -357,7 +357,7 @@ def populate_apps(intent, session):
     """Populate DB with already installed apps"""
     session_attributes = {}
     card_title = intent['name']
-    speech_output = "Success" # do we need this?
+    speech_output = "" # do we need this?
     reprompt_text = ""
     should_end_session = False
     

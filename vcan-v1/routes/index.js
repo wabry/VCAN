@@ -121,16 +121,6 @@ router.delete('/folder/:name', function(req, res, next) {
 	res.end();
 });
 
-/* Create an app */
-router.post('/app/:name', function(req, res, next) {
-	// Create the app
-	var appName = adjustName(req.params.name);
-	state.stateModule.addApp(appName);
-	// Log transaction
-	state.stateModule.appendToLog(Date(),'Created app ' + appName);
-	res.end();
-});
-
 /* Move an app */
 router.post('/app/move/:name&:destFolder', function(req, res, next) {
 	// Create the folder
@@ -231,14 +221,12 @@ router.post('/appStore/app/:index', function(req, res, next) {
 	// Get the specific category from the python scraper
 	PythonShell.run('/scraper/categories.py', cat_options, function (cat_err, categories) {
 		if (cat_err) throw cat_err;
-		console.log("*************");
 		// Get the category
 		for(var i=0;i<categories[0].length;i++)
 		{
 			if(categories[0][i].name == state.stateModule.getStoreView())
 			{
 				var category = categories[0][i];
-				console.log(category);
 				// Get the app list
 				var app_options = {
 					mode: 'json',
@@ -247,13 +235,15 @@ router.post('/appStore/app/:index', function(req, res, next) {
 				PythonShell.run('/scraper/skill_info.py', app_options, function (apps_err, apps) {
 					if (apps_err) throw apps_err;
 					// Add the app at app index to the downloads
+					console.log("**********************");
 					var appName = apps[0][appIndex].name;
+					console.log(appName);
+					console.log("**********************");
 					state.stateModule.addAppToDownloads(appName);
 				});
 			}
 		}
 	});
-	console.log("*************");
 	// Log transaction
 	state.stateModule.appendToLog(Date(),'Downloaded app with index ' + appIndex);
 	res.end();

@@ -6,7 +6,7 @@ set -e
 
 # Sanity check command line options
 usage() {
-  echo "Usage: $0 (create|destroy|reset|dump|test1)"
+  echo "Usage: $0 (create[New]|destroy|reset[New]|dump[New])"
 }
 
 if [ $# -ne 1 ]; then
@@ -20,6 +20,10 @@ case $1 in
     sqlite3 vcan.sqlite3 < schema.sql
     sqlite3 vcan.sqlite3 < data.sql
     ;;
+  "createNew")
+    sqlite3 vcan.sqlite3 < schemaNew.sql
+    sqlite3 vcan.sqlite3 < dataNew.sql
+    ;;
 
   "destroy")
     rm -rf vcan.sqlite3
@@ -31,17 +35,22 @@ case $1 in
     sqlite3 vcan.sqlite3 < data.sql
     ;;
 
+  "resetNew")
+    rm -rf vcan.sqlite3
+    sqlite3 vcan.sqlite3 < schemaNew.sql
+    sqlite3 vcan.sqlite3 < dataNew.sql
+    ;;
+
   "dump")
+    sqlite3 -batch -line vcan.sqlite3 'SELECT * FROM folders'
+    sqlite3 -batch -line vcan.sqlite3 'SELECT * FROM applications'
+    ;;
+
+  "dumpNew")
     sqlite3 -batch -line vcan.sqlite3 'SELECT * FROM folders'
     sqlite3 -batch -line vcan.sqlite3 'SELECT * FROM applications'
     sqlite3 -batch -line vcan.sqlite3 'SELECT * FROM filed'
     ;;
-
-  "test1")
-    rm -rf vcan.sqlite3
-    sqlite3 vcan.sqlite3 < schema.sql
-    sqlite3 vcan.sqlite3 < test1.sql
-  ;;
 
   *)
     usage

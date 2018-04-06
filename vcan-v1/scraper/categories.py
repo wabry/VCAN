@@ -4,8 +4,7 @@ from bs4 import BeautifulSoup
 url = "https://www.amazon.com/alexa-skills/b/ref=topnav_storetab_a2s?ie=UTF8&node=13727921011"
 temp = []
 count = 0
-attempts = 5
-e = 
+attempts = 5 
 while attempts > 0:
     try:
         r = requests.get(url)

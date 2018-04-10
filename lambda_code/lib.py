@@ -32,7 +32,15 @@ class Screen(Request):
 
     def switch_screen(self, type):
         params = urllib.urlencode({"type": type})
-        return self.send_request("POST", "screen/", params) 
+        return self.send_request("POST", "screen/", params)
+
+    def text_size(self, size):
+        params = urllib.urlencode({"size": size})
+        return self.send_request("POST", "screen/text/", params)
+
+    def toggle_mode(self):
+        params = urllib.urlencode({})
+        return self.send_request("POST", "screen/toggleMode/", params)
 
 
 class AppStore(Entity):

@@ -406,6 +406,7 @@
 		}
 		
 		li {
+			text-shadow: 1px 1px 2px #000000;
 			color: #f9ecb7;
 			text-align: center;
 			margin-left: -35px;
@@ -444,7 +445,7 @@
 					<div *ngIf="pageName == 'Home';">
 						<h2>Welcome To VCAN</h2>
 						<h3>Find a skill, get a skill, and organize your skills!</h3>
-						<h3>For help, just say "Help" and the VCAN Toucan will help you out</h3>
+						<h3>For help, say "Switch to Help" and the VCAN Toucan will help you out</h3>
 					</div>
 					<div *ngIf="pageName == 'Help';">
 							<h2>Need help? Use these commands to control your Alexa experience!</h2>
@@ -469,9 +470,7 @@
 					</div>
 					<div *ngIf="pageName == 'StoreCategories';">
 						<h3>Categories</h3>
-						<ol>
 							<li *ngFor="let cat of categoryList; let i = index">{{i}}: {{ cat }}</li>
-						</ol>
 					</div>
 					<div *ngIf="pageName == 'StoreSkills';">
 						<h3>Skills in {{storeView}}</h3>

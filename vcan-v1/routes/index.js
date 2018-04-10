@@ -1,3 +1,7 @@
+// TODO - Fix Comments
+// TODO - Add Exception Handling
+// TODO - Error Bool, Messages, and Reset
+
 var express = require('express');
 var router = express.Router();
 var state = require('../stateModule');
@@ -102,9 +106,11 @@ router.post('/folder/:name', function(req, res, next) {
 
 /* Move a folder */
 router.post('/folder/move/:name&:destFolder', function(req, res, next) {
-	// Create the folder
-	var folderName = adjustName(req.params.name);
-	var destFolder = adjustName(req.params.destFolder);
+	// Get the current folder list
+	var currentFolders = state.stateModule.folders;
+	// Get the folder to move and destination folder
+	var folderName = getFolderName(currentFolders,req.params.name);
+	var destFolder = getFolderName(currentFolders,req.params.destFolder);
 	state.stateModule.moveFolder(folderName,destFolder);
 	// Log transaction
 	state.stateModule.appendToLog(Date(),'Moved folder ' + appName + ' to folder ' + destFolder);
@@ -114,7 +120,8 @@ router.post('/folder/move/:name&:destFolder', function(req, res, next) {
 /* Delete a folder */
 router.delete('/folder/:name', function(req, res, next) {
 	// Delete the folder
-	var folderName = adjustName(req.params.name);
+	var currentFolders = state.stateModule.folders;
+	var folderName = getFolderName(currentFolders,req.params.name);
 	state.stateModule.removeFolder(folderName);
 	// Log transaction
 	state.stateModule.appendToLog(Date(),'Deleted folder ' + folderName);
@@ -123,9 +130,12 @@ router.delete('/folder/:name', function(req, res, next) {
 
 /* Move an app */
 router.post('/app/move/:name&:destFolder', function(req, res, next) {
-	// Create the folder
-	var appName = adjustName(req.params.name);
-	var destFolder = adjustName(req.params.destFolder);
+	// Get the current lists
+	var currentFolders = state.stateModule.folders;
+	var currentApps = state.stateModule.apps;
+	// Move the app
+	var appName = getAppName(currentApps,req.params.name);
+	var destFolder = getFolderName(currentFolders,req.params.destFolder);
 	state.stateModule.moveApp(appName,destFolder);
 	// Log transaction
 	state.stateModule.appendToLog(Date(),'Moved app ' + appName + ' to folder ' + destFolder);
@@ -134,8 +144,9 @@ router.post('/app/move/:name&:destFolder', function(req, res, next) {
 
 /* Delete an app */
 router.delete('/app/:name', function(req, res, next) {
+	var currentApps = state.stateModule.apps;
 	// Delete the folder
-	var appName = adjustName(req.params.name);
+	var appName = adjustName(currentApps,req.params.name);
 	state.stateModule.removeApp(appName);
 	// Log transaction
 	state.stateModule.appendToLog(Date(),'Deleted app ' + appName);
@@ -145,13 +156,15 @@ router.delete('/app/:name', function(req, res, next) {
 /* Traverse through the filesystem */
 router.post('/traverse/:dest', function(req,res,next) {
 	// Go to the correct destination
-	var destination = adjustName(req.params.dest);
-	if(destination == 'up')
+	var currentFolders = state.stateModule.folders;
+	var destination = getFolderName(currentFolders,req.params.dest);
+	if(destination == state.stateModule.parentFolder)
 	{
 		state.stateModule.traverseUp();
 	}
 	else
 	{
+		// TODO - Ensure this is a valid traversal
 		state.stateModule.traverseDown(destination);
 	}
 	// Log transaction
@@ -257,6 +270,50 @@ router.post('/app/populate', function(req, res, next) {
 	state.stateModule.appendToLog(Date(),'Populated apps');
 	res.end();
 });
+
+// Helper function to get the folder name given the current folders structure and a parameter
+function getFolderName(folders,raw) {
+	var param = adjustName(raw);
+	// If the folder name is numeric
+	if(isNumeric(param)) {
+		var folderInt = parseInt(folderName,10);
+		if(folderInt == -1) {
+			return state.stateModule.parentFolder;
+		}
+		else if (folderInt < folders.length) {
+			return folders[folderInt];
+		}
+		else {
+			// Error - invalid index, throw an error
+		}
+	}
+	else {
+		return adjustName(param);
+	}
+}
+
+// Helper function to get the app name given the current folders structure and a parameter
+function getAppName(apps,raw) {
+	var param = adjustName(raw);
+	// If the folder name is numeric
+	if(isNumeric(param)) {
+		var appInt = parseInt(folderName,10);
+		if (appInt < apps.length) {
+			return apps[appInt];
+		}
+		else {
+			// Error - invalid index, throw an error
+		}
+	}
+	else {
+		return adjustName(param);
+	}
+}
+
+// Helper function to determine if a string is numeric
+function isNumeric(n) {
+	return !isNaN(parseFloat(n)) && isFinite(n);
+  }
 
 // Helper function to update the categories in the system state
 function updateCategories() {

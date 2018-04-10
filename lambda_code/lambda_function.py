@@ -121,7 +121,7 @@ def delete_folder(intent, session):
     speech_output = "" # do we need this?
     reprompt_text = ""
     should_end_session = False
-    folder_name = intent["slots"]["folderName"]["value"]
+    folder_name = intent["slots"]["folderIndex"]["value"]
 
     folder = Folder()
     try:
@@ -134,14 +134,14 @@ def delete_folder(intent, session):
 
 
 def move_folder(intent, session):
-    """Deletes a folder for our application """
+    """Moves a folder in our application """
     
     session_attributes = {}
     card_title = intent['name']
     speech_output = "" # do we need this?
     reprompt_text = ""
     should_end_session = False
-    folder_name = intent["slots"]["folderName"]["value"]
+    folder_name = intent["slots"]["folderIndex"]["value"]
     dest = intent["slots"]["destination"]["value"]
 
     folder = Folder()

@@ -49,6 +49,26 @@ router.get('/state/appList', function(req, res, next) {
 	res.json(response);
 });
 
+/* Customization Features */
+// Change the text size
+router.post('/screen/text/:size', function(req, res, next) {
+	// Create the folder
+	var newTextSize = adjustName(req.params.size);
+
+	// Log transaction
+	state.stateModule.appendToLog(Date(),'Changed text to size ' + newTextSize);
+	res.end();
+});
+
+// Toggle the mode
+router.post('/screen/toggleMode', function(req, res, next) {
+	// Toggle the mode
+	
+	// Log transaction
+	state.stateModule.appendToLog(Date(),'Toggled the mode');
+	res.end();
+});
+
 /* Display all of the recent actions completed */
 router.get('/log', function(req, res, next) {
 	var recentLog = state.stateModule.getLog();

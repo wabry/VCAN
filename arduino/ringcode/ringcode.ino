@@ -4,6 +4,7 @@
 #endif
 
 #define PIN 6
+#define RING_DELAY 500
 
 // Parameter 1 = number of pixels in strip
 // Parameter 2 = Arduino pin number (most are valid)
@@ -27,52 +28,50 @@ void setup() {
   #endif
   // End of trinket special code
 
-
+  // Initialize serial communication
+  Serial.begin(9600);
+  
+  // Initialize the neopixel ring
   strip.begin();
-  strip.show(); // Initialize all pixels to 'off'
+  strip.show();
 }
 
 void loop() {
-  // Some example procedures showing how to display to the pixels:
-  //colorWipe(strip.Color(255, 0, 0), 50); // Red
-  //colorWipe(strip.Color(0, 255, 0), 50); // Green
-
-  
-  bool blue = false; //this is our check bool that needs to be connected to python script
-
-  
-  if (blue){
-    colorWipe(strip.Color(0, 0, 100), 50);
+  // Wait for trigger from nodejs
+  while(Serial.available()){
+    // Get the byte from the serial buffer
+    char c = Serial.read();
+    Serial.println(c);
+    // Check to see what to set the neopixel to
+    if (c == '1') {
+      // Successful operation
+      colorWipe(strip.Color(0, 0, 100), 20);
+    } else {
+      // Failed operation
+      colorWipe(strip.Color(100, 0, 0), 20);
+    }
   }
-  else {
-  
-    colorWipe(strip.Color(0, 0, 100), 5);
-
-    
-
-    
-  }
-  //colorWipe(strip.Color(0, 0, 255), 50); // Blue
-//colorWipe(strip.Color(0, 0, 0, 255), 50); // White RGBW
-  // Send a theater pixel chase in...
-  //theaterChase(strip.Color(127, 127, 127), 50); // White
-  //theaterChase(strip.Color(127, 0, 0), 50); // Red
-  //theaterChase(strip.Color(0, 0, 127), 50); // Blue
-
- // rainbow(20);
-  //rainbowCycle(20);
-  //theaterChaseRainbow(50);
 }
 
 // Fill the dots one after the other with a color
 void colorWipe(uint32_t c, uint8_t wait) {
+  // Start the animation
   for(uint16_t i=0; i<strip.numPixels(); i++) {
     strip.setPixelColor(i, c);
     strip.show();
     delay(wait);
   }
+  // Delay
+  delay(RING_DELAY);
+  // Clear the strip
+  for(uint16_t i=0; i<strip.numPixels(); i++) {
+    strip.setPixelColor(i, strip.Color(0,0,0));
+    strip.show();
+    delay(wait);
+  }
 }
 
+/*
 void rainbow(uint8_t wait) {
   uint16_t i, j;
 
@@ -148,3 +147,4 @@ uint32_t Wheel(byte WheelPos) {
   WheelPos -= 170;
   return strip.Color(WheelPos * 3, 255 - WheelPos * 3, 0);
 }
+*/

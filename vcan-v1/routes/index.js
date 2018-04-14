@@ -54,7 +54,7 @@ router.get('/state/appList', function(req, res, next) {
 router.post('/screen/text/:size', function(req, res, next) {
 	// Create the folder
 	var newTextSize = adjustName(req.params.size);
-
+	
 	// Log transaction
 	state.stateModule.appendToLog(Date(),'Changed text to size ' + newTextSize);
 	res.end();
@@ -63,7 +63,7 @@ router.post('/screen/text/:size', function(req, res, next) {
 // Toggle the mode
 router.post('/screen/toggleMode', function(req, res, next) {
 	// Toggle the mode
-	
+
 	// Log transaction
 	state.stateModule.appendToLog(Date(),'Toggled the mode');
 	res.end();

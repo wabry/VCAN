@@ -37,18 +37,24 @@ void setup() {
 }
 
 void loop() {
-  // Wait for trigger from nodejs
-  while(Serial.available()){
+  // Wait for data to arrive
+  while (!Serial.available()) {}
+  // Get the data when it arrives
+  while(Serial.available()) {
+    // Allow buffer to fill
+    delay(30);
     // Get the byte from the serial buffer
     char c = Serial.read();
-    Serial.println(c);
     // Check to see what to set the neopixel to
     if (c == '1') {
       // Successful operation
       colorWipe(strip.Color(0, 0, 100), 20);
-    } else {
+    } else if (c == '0') {
       // Failed operation
       colorWipe(strip.Color(100, 0, 0), 20);
+    } else {
+      // Unknown
+      colorWipe(strip.Color(0, 100, 0), 20);
     }
   }
 }

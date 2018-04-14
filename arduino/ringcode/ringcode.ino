@@ -41,8 +41,6 @@ void loop() {
   while (!Serial.available()) {}
   // Get the data when it arrives
   while(Serial.available()) {
-    // Allow buffer to fill
-    delay(30);
     // Get the byte from the serial buffer
     char c = Serial.read();
     // Check to see what to set the neopixel to

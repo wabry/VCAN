@@ -2,31 +2,19 @@
 Created on 2011-12-02
 
 @author: VCAN
+
+Successful running with Python3
 '''
 
-## import the serial library
+import sys
 import serial
+import time
 
-## Boolean variable that will represent 
-## whether or not the arduino is connected
-connected = False
+# Need to communicate with Ardunio over serial port
+ser = serial.Serial("COM1", 9600)
 
-## open the serial port that your ardiono 
-## is connected to.
-ser = serial.Serial("COM3", 9600)
+# Sleep for 1.6 seconds to allow asynchronous serial.Serial 
+# to finish connecting
+time.sleep(1.6)
 
-## loop until the arduino tells us it is ready
-while not connected:
-    serin = ser.read()
-    connected = True
-
-## Tell the arduino to blink!
-ser.write("0")
-
-## Wait until the arduino tells us it 
-## is finished blinking
-while ser.read() == '1':
-    ser.read()
-
-## close the port and end the program
-ser.close()
+ser.write('0'.encode())

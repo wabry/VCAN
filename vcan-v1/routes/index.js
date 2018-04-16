@@ -194,6 +194,8 @@ router.post('/traverse/:dest', function(req,res,next) {
 
 /* Swap between the apps page and the apps store */
 router.post('/screen/:name', function(req, res, next) {
+	// Show that we have received a message
+	showReceived(true);
 	// Get the type to swap to
 	var type = adjustName(req.params.name);
 	if (type == 'filesystem') {
@@ -393,5 +395,22 @@ function adjustName(name) {
     }
     return name.substring(equalsSpot+1);
 };
+
+// Function to display a received request off of the neopixel ring
+function showReceived(success) {
+	var options = {
+		mode: 'json'
+	};
+	if (success) {
+		PythonShell.run('../arduino/success.py', options, function (disp_err) {
+			if (disp_err) throw disp_err;
+		});
+	}
+	else {
+		PythonShell.run('../arduino/fail.py', options, function (disp_err) {
+			if (disp_err) throw disp_err;
+		});
+	}
+}
 
 module.exports = router;

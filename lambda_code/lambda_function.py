@@ -369,6 +369,45 @@ def populate_apps(intent, session):
     
     return build_response(session_attributes, build_speechlet_response(
         card_title, speech_output, reprompt_text, should_end_session))
+
+
+def text_size(intent, session):
+    """Modify text size for accessibility."""
+    session_attributes = {}
+    card_title = intent['name']
+    speech_output = "" # do we need this?
+    reprompt_text = ""
+    should_end_session = False
+    size = intent["slots"]["size"]["value"]
+    
+    screen = Screen()
+    try:
+        screen.text_size(size)
+    except:
+        speech_output = "Failure occured while connecting, please try again."
+    
+    return build_response(session_attributes, build_speechlet_response(
+        card_title, speech_output, reprompt_text, should_end_session))
+
+
+def toggle_mode(intent, session):
+    """Change viewing mode for viewing in daytime and nighttime mode."""
+    session_attributes = {}
+    card_title = intent['name']
+    speech_output = "" # do we need this?
+    reprompt_text = ""
+    should_end_session = False
+
+    
+    screen = Screen()
+    try:
+        screen.toggle_mode()
+    except:
+        speech_output = "Failure occured while connecting, please try again."
+    
+    return build_response(session_attributes, build_speechlet_response(
+        card_title, speech_output, reprompt_text, should_end_session))
+
 # --------------- Events ------------------
 
 def on_session_started(session_started_request, session):
@@ -431,7 +470,13 @@ def on_intent(intent_request, session):
         return category_index(intent, session)
     elif intent_name == "populateApps":
         return populate_apps(intent, session)
-        
+
+    # Omega
+    elif intent_name == "textSize":
+        return text_size(intent, session)
+    elif intent_name == "toggleMode":
+        return toggle_mode(intent, session)
+
     elif intent_name == "AMAZON.HelpIntent":
         return get_welcome_response()
     elif intent_name == "AMAZON.CancelIntent" or intent_name == "AMAZON.StopIntent":

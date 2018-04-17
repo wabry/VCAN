@@ -25,6 +25,9 @@ app.use(expressValidator());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'dist')));
 
+// Set up the serial configuration
+http.get('http://localhost:3000/start',(resp)=>{});
+
 /* API routing */
 app.use('/api/alexa/v1', api);
 

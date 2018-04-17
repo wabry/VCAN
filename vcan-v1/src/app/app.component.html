@@ -1,9 +1,67 @@
 <head>
 		<style>
-			.lightblue-background {
+		.day-background {
 			 border-radius: 8px;
 			 background-color: white;
 		}
+		.day-body{
+			margin:60px;
+			columns: #000000;
+			background:#CEFFB6;
+			font: 300 18px/18px Roboto, sans-serif;
+
+		}
+
+		.day-h1{
+			margin-top: -40px;
+			border-style: solid;
+			border-radius: 7px;
+			border-width: 0px 10px 2px 20px;
+			background-color: white;
+			color: #f9ecb7;
+			height: 75px;
+		
+			text-align: center;
+			text-shadow: 1px 1px 2px #000000;
+		}
+		.day-headerColor{
+			color:#8f8769;
+		}
+		.day-textColor {
+			color:black;
+		}
+
+		.night-background{
+			border-radius: 8px;
+			background-color: #576052;
+		}
+		.night-body{
+			margin:60px;
+			columns: #000000;
+			background:#93B383;
+			font: 300 18px/18px Roboto, sans-serif;
+
+		}
+		.night-h1{
+			margin-top: -40px;
+			border-style: solid;
+			border-radius: 7px;
+			border-width: 0px 10px 2px 20px;
+			background-color: #585E69;
+			color: #f9ecb7;
+			height: 75px;
+		
+			text-align: center;
+			text-shadow: 1px 1px 2px #000000;
+		}
+		.night-headerColor{
+			color:#f9ecb7;
+		}
+		.night-textColor {
+			color:white;
+		}
+
+
 		.white-background {
 			   border-radius: 8px;
 		  background-color: lightblue;
@@ -35,12 +93,12 @@
 		  margin-top: 25px;
 		}
 		
-		body{
+		/*body{
 			margin:60px;
 			color:#000;
 			background:#CEFFB6;
 			font:300 18px/18px Roboto, sans-serif;
-		}
+		}*/
 
 
 		*,:after,:before{box-sizing:border-box}
@@ -362,7 +420,7 @@
 			text-align: center;    
 		}
 		  
-		h1 {
+		/*h1 {
 			margin-top: -40px;
 			border-style: solid;
 			border-radius: 7px;
@@ -373,7 +431,7 @@
 		
 			text-align: center;
 			text-shadow: 1px 1px 2px #000000;
-		}
+		}*/
 		
 		h4 {
 			text-shadow: 1px 1px 2px #000000;
@@ -421,6 +479,7 @@
 		}
 		.popup{
 			border-style: solid;
+			border-color:blue;
 			border-radius:15px;
 			border-width:10px 10px 10px 10px;
 			padding: 10px;
@@ -430,8 +489,16 @@
 			left:500;
 			height:200px;
 			width:300px;
-			background-color: white;
+			background-color: grey;
 		}
+		.error-title{
+			color:red;
+		}
+
+		.error-text{
+			color:black;
+		}
+		
 		ul#horizontal li {
 			display:inline;
 		}
@@ -439,69 +506,67 @@
 		</style>
 		</head>
 
-
-	<div>
-			<body>
-				<div class = popup> 
-						<h4>Error Message</h4>
-						<p>Some text in the modal.</p>
-
-
+	<div [ngClass]="nightMode + '-background outer-div'">
+			<body [ngClass]="nightMode + '-body'">
+				<div class = "popup" *ngIf="errorBool"> 
+						<h2 class = "error-title"><b>Error</b></h2>
+						<p class = "error-text">{{errorMessage}}</p>
 				</div>
-				
-					<h1 style="font-family:verdana" *ngIf="pageName == 'Home';">VCAN Home</h1>
-					<h1 style="font-family:verdana" *ngIf="pageName == 'Filesystem';">Filesystem</h1>
-					<h1 style="font-family:verdana" *ngIf="pageName == 'Help';">Help</h1>
-					<h1 style="font-family:verdana" *ngIf="pageName == 'StoreCategories' || pageName == 'StoreSkills';">Skills Store</h1>
+					<h1 [ngClass]="nightMode + '-h1'" style="font-family:verdana" *ngIf="pageName == 'Home';">VCAN Home</h1>
+					<h1 [ngClass]="nightMode + '-h1'" style="font-family:verdana" *ngIf="pageName == 'Filesystem';">Filesystem</h1>
+					<h1 [ngClass]="nightMode + '-h1'" style="font-family:verdana" *ngIf="pageName == 'Help';">Help</h1>
+					<h1 [ngClass]="nightMode + '-h1'" style="font-family:verdana" *ngIf="pageName == 'StoreCategories' || pageName == 'StoreSkills';">Skills Store</h1>
 					<div *ngIf="pageName =='Filesystem';">
-						<h2>Current Path: {{ path }}</h2>
-						<h3>Skills</h3>
+						<h2 [ngClass]="nightMode + '-headerColor'">Current Path: {{ path }}</h2>
+						<h3 [ngClass]="nightMode + '-headerColor'">Skills</h3>
 						<ul>
-							<li *ngFor="let app of apps">
-								<font size = {{textSize}}>{{ app }}</font>
+							<li *ngFor="let app of apps; let i = index">
+								<font  [ngClass]="nightMode + '-textColor'" size = {{textSize}}>{{i}}: {{ app }}</font>
 							</li>
 						</ul>
-						<h3>Folders</h3>
+						<h3 [ngClass]="nightMode + '-headerColor'">Folders</h3>
 						<ul>
-							<li *ngFor="let folder of folders">
-								<font size = {{textSize}}>{{ folder }}</font>
+							<li *ngFor="let folder of folders; let i = index">
+								<font [ngClass]="nightMode + '-textColor'" size = {{textSize}}>{{i}}: {{ folder }}</font>
 							</li>
 						</ul>
 					</div>
 					<div *ngIf="pageName == 'Home';">
-						<h2>Welcome To VCAN</h2>
-						<h3>Find a skill, get a skill, and organize your skills!</h3>
-						<h3>For help, say "Switch to Help" and the VCAN Toucan will help you out</h3>
+						<h2 [ngClass]="nightMode + '-headerColor'">Welcome To VCAN</h2>
+						<h3 [ngClass]="nightMode + '-textColor'">Find a skill, get a skill, and organize your skills!</h3>
+						<h3 [ngClass]="nightMode + '-textColor'">For help, say "Switch to Help" and the VCAN Toucan will help you out</h3>
 					</div>
 					<div *ngIf="pageName == 'Help';">
-							<h2>Need help? Use these commands to control your Alexa experience!</h2>
-							<h3>Global Navigation:</h3>
-							<p>“Switch To Home” – Navigates back to the home screen</p>
-							<p>“Switch To Help” - Navigates back to the help screen (this menu)</p>
-							<p>“Switch To Filesystem” – Navigates to the filesystem screen</p>
-							<p>“Switch To Store” – Navigates to the store screen</p>
-							<h3>Filesystem Commands:</h3>
-							<p>“Traverse to 'Folder' – Go into a folder named 'Folder'</p>
-							<p>“Traverse up” – Go to your parent folder</p>
-							<p>“Create folder 'Folder'” – Creates a folder named 'Folder'</p>
-							<p>“Move folder 'Folder1' into 'Folder2'” – Moves folder 'Folder1' into 'Folder2'</p>
-							<p>“Delete folder 'Folder'” – Deletes a folder named 'Folder'</p>
-							<p>“Create app 'App'” – Creates an app named 'App'</p>
-							<p>“Move app 'App' into 'Folder'” – Moves app 'App' into 'Folder'</p>
-							<p>“Delete app 'App'” – Deletes an app named 'App'</p>
-							<h3>Store Commands:</h3>
-							<p>"Enter 'CategoryIndex'” – Enter the category at position 'CategoryIndex'</p>
-							<p>“Switch To Store” – Goes back to the default category view</p>
-							<p>“Download 'AppIndex'” – Enables an app at position 'AppIndex', adds it to “downloads" folder</p>	
+							<h3 [ngClass]="nightMode + '-textColor'">Global Navigation:</h3>
+							<h5 [ngClass]="nightMode + '-textColor'">“Switch To Home” – Navigates back to the home screen</h5>
+							<h5 [ngClass]="nightMode + '-textColor'">“Switch To Help” - Navigates back to the help screen (this menu)</h5>
+							<h5 [ngClass]="nightMode + '-textColor'">“Switch To Filesystem” – Navigates to the filesystem screen</h5>
+							<h5 [ngClass]="nightMode + '-textColor'">“Switch To Store” – Navigates to the store screen</h5>
+							<h3 [ngClass]="nightMode + '-textColor'">Filesystem Commands:</h3>
+							<h5 [ngClass]="nightMode + '-textColor'">“Traverse to 'Folder' – Go into a folder named 'Folder'</h5>
+							<h5 [ngClass]="nightMode + '-textColor'">“Traverse up” – Go to your parent folder</h5>
+							<h5 [ngClass]="nightMode + '-textColor'">“Create folder 'Folder'” – Creates a folder named 'Folder'</h5>
+							<h5 [ngClass]="nightMode + '-textColor'">“Move folder 'Folder1' into 'Folder2'” – Moves folder 'Folder1' into 'Folder2'</h5>
+							<h5 [ngClass]="nightMode + '-textColor'">“Delete folder 'Folder'” – Deletes a folder named 'Folder'</h5>
+							<h5 [ngClass]="nightMode + '-textColor'">“Create app 'App'” – Creates an app named 'App'</h5>
+							<h5 [ngClass]="nightMode + '-textColor'">“Move app 'App' into 'Folder'” – Moves app 'App' into 'Folder'</h5>
+							<h5 [ngClass]="nightMode + '-textColor'">“Delete app 'App'” – Deletes an app named 'App'</h5>
+							<h3 [ngClass]="nightMode + '-textColor'">Store Commands:</h3>
+							<h5 [ngClass]="nightMode + '-textColor'">"Enter 'CategoryIndex'” – Enter the category at position 'CategoryIndex'</h5>
+							<h5 [ngClass]="nightMode + '-textColor'">“Switch To Store” – Goes back to the default category view</h5>
+							<h5 [ngClass]="nightMode + '-textColor'">“Download 'AppIndex'” – Enables an app at position 'AppIndex', adds it to “downloads" folder</h5>	
+							<h3 [ngClass]="nightMode + '-textColor'">Customization Commands:</h3>
+							<h5 [ngClass]="nightMode + '-textColor'">“Change Text to 'textSize'” – Changes text size to textSize (small, medium, or large) or (1, 2, or 3)</h5>
+							<h5 [ngClass]="nightMode + '-textColor'">“Toggle night mode” – Toggles between day and night mode</h5>
 					</div>
 					<div *ngIf="pageName == 'StoreCategories';">
-						<h3>Categories</h3>
+						<h3 [ngClass]="nightMode + '-headerColor'">Categories</h3>
 							<li *ngFor="let cat of categoryList; let i = index">
-								<font size = {{textSize}}>{{i}}: {{ cat }}</font>
+								<font [ngClass]="nightMode + '-textColor'" size = {{textSize}}>{{i}}: {{ cat }}</font>
 							</li>
 					</div>
 					<div *ngIf="pageName == 'StoreSkills';">
-						<h3>Skills in {{storeView}}</h3>
+						<h3 [ngClass]="nightMode + '-headerColor'">Skills in {{storeView}}</h3>
 						<table class="image" style="width:90%" align="center">
 							<tr>
 								<td *ngFor="let pic of storeAppImage">
@@ -510,7 +575,7 @@
 							</tr>
 							<tr>
 								<td *ngFor="let app of storeAppNames; let i = index">
-									<font size = {{textSize}}>{{i}}: {{app}}</font>
+									<font [ngClass]="nightMode + '-textColor'" size = "+0">{{i}}: {{app}}</font>
 								</td>
 							</tr>
 									</table>
@@ -544,6 +609,7 @@
 										</div>
 									</div>
 								</div>
+								<h6 [ngClass]="nightMode + '-textColor'">For help, say "Switch to Help"</h6> 
 							</body>
 							</div>
 							<p>By William Bryant, Andrew Katcha, Caleb Boyer, and Josh Knill</p>

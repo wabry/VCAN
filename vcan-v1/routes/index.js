@@ -339,6 +339,10 @@ router.post('/appStore/category/:index', function(req, res, next) {
 				state.stateModule.appendToLog(Date(),'Entered a category');
 				displaySuccess(true);
 			}
+			// Otherwise, set an error
+			else {
+				setError('Please choose a valid category!');
+			}
 		}
 	} catch(err) {
 		state.stateModule.appendToLog(Date(),'Error: ' + err);

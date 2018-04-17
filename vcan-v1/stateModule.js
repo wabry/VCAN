@@ -20,8 +20,8 @@ var stateModule = (function() {
     var storeAppDeveloper = [];
     var storeAppImage = [];
     // State of customization and error values
-    var textSize = 20;
-    var nightMode = false;
+    var textSize = '+1';
+    var nightMode = 'day';
     var errorBool = false;
     var errorMsg = 'Insert message here';
 
@@ -33,7 +33,11 @@ var stateModule = (function() {
 
     /* Functions to handle customization and error messages */
     pub.setTextSize = function(size) { textSize = size; };
-    pub.toggleNightMode = function() { nightMode = !nightMode; };
+    pub.toggleNightMode = function() 
+    { 
+        if (nightMode == 'day') { nightMode = 'night'; }
+        else { nightMode = 'day'; }
+    };
     pub.setError = function(message) {
         errorBool = true;
         errorMsg = message;

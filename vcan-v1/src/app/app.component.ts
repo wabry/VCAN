@@ -22,6 +22,11 @@ export class AppComponent implements OnInit, OnDestroy {
   storeAppUtterance: Array<any>;
   storeAppDeveloper: Array<any>;
   storeAppImage: Array<any>;
+  // Define variables for customization and errors
+  textSize: any;
+  nightMode: any;
+  errorBool: any;
+  errorMessage: any;
   // Define an interval for refreshing
   interval:any;
 
@@ -37,8 +42,6 @@ export class AppComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     clearInterval(this.interval);
   }
-
-  // TODO reduce JSON calls while keeping the folders dynamic
   
   // Called to dynamically refresh the data
   refreshData() {
@@ -55,6 +58,11 @@ export class AppComponent implements OnInit, OnDestroy {
     this._dataService.getStoreAppUtterance().subscribe(res => this.storeAppUtterance = res);
     this._dataService.getStoreAppDeveloper().subscribe(res => this.storeAppDeveloper = res);
     this._dataService.getStoreAppImage().subscribe(res => this.storeAppImage = res);
+    // Get information for customization and error messages
+    this._dataService.getTextSize().subscribe(res => this.textSize = res);
+    this._dataService.getNightMode().subscribe(res => this.nightMode = res);
+    this._dataService.getErrorBool().subscribe(res => this.errorBool = res);
+    this._dataService.getErrorMessage().subscribe(res => this.errorMessage = res);
   }
   
   // Create an instance of the DataService through dependency injection
@@ -72,6 +80,11 @@ export class AppComponent implements OnInit, OnDestroy {
     this._dataService.getStoreAppUtterance().subscribe(res => this.storeAppUtterance = res);
     this._dataService.getStoreAppDeveloper().subscribe(res => this.storeAppDeveloper = res);
     this._dataService.getStoreAppImage().subscribe(res => this.storeAppImage = res);
+    // Get information for customization and error messages
+    this._dataService.getTextSize().subscribe(res => this.textSize = res);
+    this._dataService.getNightMode().subscribe(res => this.nightMode = res);
+    this._dataService.getErrorBool().subscribe(res => this.errorBool = res);
+    this._dataService.getErrorMessage().subscribe(res => this.errorMessage = res);
   }
   
 }

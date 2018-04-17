@@ -1,6 +1,4 @@
 // This file controls the current state of the system at any given time
-// TODO - Add exceptions/error handling
-// TODO - Add functionality for path and folder
 var dbWrapper = require('./dbWrapper'); // Add to interact with the database
 
 var stateModule = (function() {
@@ -21,16 +19,33 @@ var stateModule = (function() {
     var storeAppUtterance = [];
     var storeAppDeveloper = [];
     var storeAppImage = [];
+    // State of customization and error values
+    var textSize = 20;
+    var nightMode = false;
+    var errorBool = false;
+    var errorMsg = 'Insert message here';
 
     var pub = {};   // public object - returned at end of module
 
     /* Functions to edit the page name */
-    pub.updatePage = function(pageType) {
-        pageName = pageType;
+    pub.updatePage = function(pageType) { pageName = pageType; };
+    pub.getPageName = function() { return pageName; };
+
+    /* Functions to handle customization and error messages */
+    pub.setTextSize = function(size) { textSize = size; };
+    pub.toggleNightMode = function() { nightMode = !nightMode; };
+    pub.setError = function(message) {
+        errorBool = true;
+        errorMsg = message;
     };
-    pub.getPageName = function() {
-        return pageName;
+    pub.clearError = function () {
+        errorBool = false;
     };
+
+    pub.getTextSize = function() { return textSize; };
+    pub.getNightMode = function() { return nightMode; };
+    pub.getErrorBool = function() { return errorBool; };
+    pub.getErrorMsg = function() { return errorMsg; };
 
     /* Functions to handle store view perspective */
     pub.changeCategoryView = function(storeName, newCategoryList) {
@@ -55,24 +70,12 @@ var stateModule = (function() {
         }
     };
 
-    pub.getStoreView = function() {
-        return storeView;
-    };
-    pub.getCategories = function() {
-        return categoryList;
-    };
-    pub.getStoreAppNames = function() {
-        return storeAppNames;
-    };
-    pub.getStoreAppUtterance = function() {
-        return storeAppUtterance;
-    };
-    pub.getStoreAppDeveloper = function() {
-        return storeAppDeveloper;
-    };
-    pub.getStoreAppImage = function() {
-        return storeAppImage;
-    };
+    pub.getStoreView = function() { return storeView; };
+    pub.getCategories = function() { return categoryList; };
+    pub.getStoreAppNames = function() { return storeAppNames; };
+    pub.getStoreAppUtterance = function() { return storeAppUtterance; };
+    pub.getStoreAppDeveloper = function() { return storeAppDeveloper; };
+    pub.getStoreAppImage = function() { return storeAppImage; };
 
     /* Callback functions */
     pub.getAppsCb = function(dbApps) {
@@ -97,15 +100,9 @@ var stateModule = (function() {
     };
 
     /***** Log Functionality *****/
-    pub.appendToLog = function (time,action) {
-        log.unshift(time + ' --- ' + action);
-    };
-    pub.getLog = function() {
-        return log;
-    };
-    pub.getPath = function (action) {
-        return path;
-    };
+    pub.appendToLog = function (time,action) { log.unshift(time + ' --- ' + action); };
+    pub.getLog = function() { return log; };
+    pub.getPath = function (action) { return path; };
     /***** App Functionality  ******/
     // Add the app to the app list
     pub.addApp = function (appName) {
@@ -172,21 +169,13 @@ var stateModule = (function() {
     };
     // Traverse to a sub folder
     pub.traverseDown = function(folderName) {
-        // If the folder doesnt exist, cannot traverse down
-        if(!elementExists(folders,folderName))
-        {
-
-        }
-        else
-        {
-            // Update the current and parent folders
-            parentFolder = currentFolder;
-            currentFolder = folderName;
-            path = moveDownPath(path,currentFolder);
-            // Update the folders and apps
-            dbWrapper.getApps(currentFolder,pub.getAppsCb);    // async
-            dbWrapper.getFolders(currentFolder,pub.getFolderCb);    // async
-        }
+        // Update the current and parent folders
+        parentFolder = currentFolder;
+        currentFolder = folderName;
+        path = moveDownPath(path,currentFolder);
+        // Update the folders and apps
+        dbWrapper.getApps(currentFolder,pub.getAppsCb);    // async
+        dbWrapper.getFolders(currentFolder,pub.getFolderCb);    // async
     };
 
     return pub; // Expose externally

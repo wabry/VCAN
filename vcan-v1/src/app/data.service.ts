@@ -55,4 +55,22 @@ export class DataService {
       .map(result => this.result = result.json().images);
   }
 
+  /* Customization and Error Commands */
+  getTextSize() {
+    return this._http.get("/api/alexa/v1/state/customization")
+      .map(result => this.result = result.json().textSize);
+  }
+  getNightMode() {
+    return this._http.get("/api/alexa/v1/state/customization")
+      .map(result => this.result = result.json().nightMode);
+  }
+  getErrorBool() {
+    return this._http.get("/api/alexa/v1/state/errors")
+      .map(result => this.result = result.json().errorBool);
+  }
+  getErrorMessage() {
+    return this._http.get("/api/alexa/v1/state/errors")
+      .map(result => this.result = result.json().errorMsg);
+  }  
+
 }

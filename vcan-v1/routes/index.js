@@ -246,7 +246,7 @@ router.post('/traverse/:dest', function(req,res,next) {
 		// Go to the correct destination
 		var currentFolders = state.stateModule.getFolders();
 		var destination = getFolderName(currentFolders,req.params.dest);
-		if(destination == state.stateModule.getParent() || destination == 'up')
+		if(destination == state.stateModule.getParent() || destination == 'up' || req.params.dest == 'up')
 		{
 			// Traverse to the parent folder
 			state.stateModule.traverseUp();
@@ -259,6 +259,7 @@ router.post('/traverse/:dest', function(req,res,next) {
 			// Traverse to dest if it is oen of the current folders
 			if(!existsInList(currentFolders,destination)) {
 				// Destination not in working directory
+				state.stateModule.appendToLog(Date(),'Request = ' + req.params.dest + '*** Destination = ' + destination);
 				setError('Folder not in the current working directory!');
 			} else {
 				// Traverse into folder
@@ -432,7 +433,7 @@ function getFolderName(folders,rawName) {
 	var param = adjustName(rawName);
 	// If the folder name is numeric
 	if(isNumeric(param)) {
-		var folderInt = parseInt(rawName,10);
+		var folderInt = parseInt(param,10);
 		if(folderInt == -1 || param == '-1') {
 			return state.stateModule.getParent();
 		} else if (folderInt < folders.length && folderInt >= 0) {
@@ -450,7 +451,7 @@ function getAppName(apps,rawName) {
 	var param = adjustName(rawName);
 	// If the folder name is numeric
 	if(isNumeric(param)) {
-		var appInt = parseInt(rawName,10);
+		var appInt = parseInt(param,10);
 		if (appInt < apps.length && appInt >= 0) {
 			return apps[appInt];
 		} else {
@@ -521,7 +522,7 @@ function adjustName(name) {
             equalsSpot = i;
             break;
         }
-    }
+	}
     return name.substring(equalsSpot+1);
 };
 

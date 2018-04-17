@@ -419,6 +419,22 @@
 			font-family: verdana;
 			font-size: 20px;
 		}
+		.popup{
+			border-style: solid;
+			border-radius:15px;
+			border-width:10px 10px 10px 10px;
+			padding: 10px;
+			display:box;
+			position:absolute;
+			top:100;
+			left:500;
+			height:200px;
+			width:300px;
+			background-color: white;
+		}
+		ul#horizontal li {
+			display:inline;
+		}
 
 		</style>
 		</head>
@@ -426,6 +442,12 @@
 
 	<div>
 			<body>
+				<div class = popup> 
+						<h4>Error Message</h4>
+						<p>Some text in the modal.</p>
+
+
+				</div>
 				
 					<h1 style="font-family:verdana" *ngIf="pageName == 'Home';">VCAN Home</h1>
 					<h1 style="font-family:verdana" *ngIf="pageName == 'Filesystem';">Filesystem</h1>
@@ -435,11 +457,15 @@
 						<h2>Current Path: {{ path }}</h2>
 						<h3>Skills</h3>
 						<ul>
-							<li *ngFor="let app of apps">{{ app }}</li>
+							<li *ngFor="let app of apps">
+								<font size = {{textSize}}>{{ app }}</font>
+							</li>
 						</ul>
 						<h3>Folders</h3>
 						<ul>
-							<li *ngFor="let folder of folders">{{ folder }}</li>
+							<li *ngFor="let folder of folders">
+								<font size = {{textSize}}>{{ folder }}</font>
+							</li>
 						</ul>
 					</div>
 					<div *ngIf="pageName == 'Home';">
@@ -470,7 +496,9 @@
 					</div>
 					<div *ngIf="pageName == 'StoreCategories';">
 						<h3>Categories</h3>
-							<li *ngFor="let cat of categoryList; let i = index">{{i}}: {{ cat }}</li>
+							<li *ngFor="let cat of categoryList; let i = index">
+								<font size = {{textSize}}>{{i}}: {{ cat }}</font>
+							</li>
 					</div>
 					<div *ngIf="pageName == 'StoreSkills';">
 						<h3>Skills in {{storeView}}</h3>
@@ -481,7 +509,9 @@
 								</td>
 							</tr>
 							<tr>
-								<td *ngFor="let app of storeAppNames; let i = index">{{i}}: {{app}}</td>
+								<td *ngFor="let app of storeAppNames; let i = index">
+									<font size = {{textSize}}>{{i}}: {{app}}</font>
+								</td>
 							</tr>
 									</table>
 								</div>

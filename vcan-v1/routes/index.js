@@ -69,15 +69,15 @@ router.post('/screen/text/:size', function(req, res, next) {
 	try {
 		// Change the text size
 		var newTextSize = adjustName(req.params.size);
-		if(size == 'small') {
+		if(newTextSize == 'small' || newTextSize == '1') {
 			state.stateModule.setTextSize('-1');
 			state.stateModule.appendToLog(Date(),'Changed text to small');
 			displaySuccess(true);
-		} else if (size == 'medium') {
+		} else if (newTextSize == 'medium' || newTextSize == '2') {
 			state.stateModule.setTextSize('+1');
 			state.stateModule.appendToLog(Date(),'Changed text to medium');
 			displaySuccess(true);
-		} else if (size == 'large') {
+		} else if (newTextSize == 'large' || newTextSize == '3') {
 			state.stateModule.setTextSize('+2');
 			state.stateModule.appendToLog(Date(),'Changed text to large');
 			displaySuccess(true);
@@ -129,25 +129,29 @@ router.post('/folder/:name', function(req, res, next) {
 /* Move a folder */
 router.post('/folder/move/:name&:destFolder', function(req, res, next) {
 	try {
+		state.stateModule.appendToLog(Date(),'In the function');
 		// Get the current folder list
 		var currentFolders = state.stateModule.getFolders();
 		// Get the folder to move and destination folder
 		var folderName = getFolderName(currentFolders,req.params.name);
-		var destFolder = getFolderName(currentFolders,req.params.destFolder);
-		if(folderName == destFolder) {
+		var dest = getFolderName(currentFolders,req.params.destFolder);
+		if(folderName == dest) {
 			// Can't move folder into itself
+			state.stateModule.appendToLog(Date(),'Cannot move a folder into itself!');
 			setError('Cannot move a folder into itself!');
 		} else if (!existsInList(currentFolders,folderName)) {
 			// Target folder doesn't exist
+			state.stateModule.appendToLog(Date(),'The target folder does not exist in the working directory!');
 			setError('The target folder does not exist in the working directory!');
-		} else if (!existsInList(currentFolders,destFolder)) {
+		} else if (!existsInList(currentFolders,dest) && dest != state.stateModule.getParent()) {
 			// Destination folder doesn't exist
+			state.stateModule.appendToLog(Date(),'The destination folder does not exist in the working directory!');
 			setError('The destination folder does not exist in the working directory!');
 		} else {
 			// Move the folder
-			state.stateModule.moveFolder(folderName,destFolder);
+			state.stateModule.moveFolder(folderName,dest);
 			// Log transaction
-			state.stateModule.appendToLog(Date(),'Moved folder ' + appName + ' to folder ' + destFolder);
+			state.stateModule.appendToLog(Date(),'Moved folder ' + folderName + ' to folder ' + dest);
 			displaySuccess(true);
 		}
 	} catch(err) {
@@ -193,10 +197,10 @@ router.post('/app/move/:name&:destFolder', function(req, res, next) {
 		var destFolder = getFolderName(currentFolders,req.params.destFolder);
 		if(!existsInList(currentApps,appName)) {
 			// App is not in working directory
-			setError('Folder is not in the current working directory!');
-		} else if (!existsInList(currentFolders,destFolder)) {
-			// Folder is not in working directory
 			setError('App is not in the current working directory!');
+		} else if (!existsInList(currentFolders,destFolder) && destFolder != state.stateModule.getParent()) {
+			// Folder is not in working directory
+			setError('Folder is not in the current working directory!');
 		} else {
 			// Move the app
 			state.stateModule.moveApp(appName,destFolder);
@@ -242,7 +246,7 @@ router.post('/traverse/:dest', function(req,res,next) {
 		// Go to the correct destination
 		var currentFolders = state.stateModule.getFolders();
 		var destination = getFolderName(currentFolders,req.params.dest);
-		if(destination == state.stateModule.parentFolder || destination == 'up')
+		if(destination == state.stateModule.getParent() || destination == 'up')
 		{
 			// Traverse to the parent folder
 			state.stateModule.traverseUp();
@@ -405,9 +409,13 @@ function setError(message) {
 
 // Helper function to determine if a string is in a list
 function existsInList(listIn,stringIn) {
+	if (stringIn == "")
+	{
+		return false;
+	}
 	var i = listIn.length;
 	while(i--) {
-		if(listIn[i] === stringIn)
+		if(listIn[i] == stringIn)
 		{
 			return true;
 		}	
@@ -416,36 +424,37 @@ function existsInList(listIn,stringIn) {
 }
 
 // Helper function to get the folder name given the current folders structure and a parameter
-function getFolderName(folders,raw) {
-	var param = adjustName(raw);
+function getFolderName(folders,rawName) {
+	var param = adjustName(rawName);
 	// If the folder name is numeric
 	if(isNumeric(param)) {
-		var folderInt = parseInt(folderName,10);
-		if(folderInt == -1) {
-			return state.stateModule.parentFolder;
-		}
-		else if (folderInt < folders.length) {
+		var folderInt = parseInt(rawName,10);
+		if(folderInt == -1 || param == '-1') {
+			return state.stateModule.getParent();
+		} else if (folderInt < folders.length && folderInt >= 0) {
 			return folders[folderInt];
+		} else {
+			return "";
 		}
-	}
-	else {
-		return adjustName(param);
+	} else {
+		return param;
 	}
 }
 
 // Helper function to get the app name given the current folders structure and a parameter
-function getAppName(apps,raw) {
-	var param = adjustName(raw);
+function getAppName(apps,rawName) {
+	var param = adjustName(rawName);
 	// If the folder name is numeric
 	if(isNumeric(param)) {
-		var appInt = parseInt(folderName,10);
-		if (appInt < apps.length) {
+		var appInt = parseInt(rawName,10);
+		if (appInt < apps.length && appInt >= 0) {
 			return apps[appInt];
+		} else {
+			return "";
 		}
-	}
-	else {
-		return adjustName(param);
-	}
+	} else {
+		return param;
+	} 
 }
 
 // Helper function to determine if a string is numeric

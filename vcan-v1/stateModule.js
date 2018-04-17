@@ -116,10 +116,10 @@ var stateModule = (function() {
     };
     // Move the app
     pub.moveApp = function (appName, destFolder) {
-        // Remove the folder from the list and db
+        // Remove the app from the list and db
         pub.removeApp(appName);
-        // Add the folder to the right place in the db
-        dbWrapper.addApp(appName,destFolder);    // async
+        // Add the app to the right place in the db
+        setTimeout(addAppWrapper,2000,appName,destFolder);    // async
     };
     pub.addAppToDownloads = function (appName) {
         // Add the app to the database
@@ -146,14 +146,19 @@ var stateModule = (function() {
     pub.moveFolder = function (folderName, destFolder) {
         // Remove the folder from the list and db
         pub.removeFolder(folderName);
-        // Add the folder to the right place in the db
-        dbWrapper.addFolder(folderName,destFolder);    // async
+        // Add the folder to the right place in the db, waiting for the folder to be removed first
+        setTimeout(addFolderWrapper,2000,folderName,destFolder);    // async
     };
     // Get all folders in the current directory
     pub.getFolders = function() {
         dbWrapper.getFolders(currentFolder,pub.getFolderCb);
         return folders;
     };
+    // Get the parent folder of the current directory
+    pub.getParent = function() {
+        return parentFolder;
+    };
+
 
     /***** Directory Functionality *****/
     // Traverse to the parent folder
@@ -188,6 +193,14 @@ function elementExists(arr,element) {
         if(element == arr[i]) { return true; }
     }
     return false;
+}
+
+// Wrapper for adding timeouts
+function addFolderWrapper(folderName,destFolder) {
+    dbWrapper.addFolder(folderName,destFolder);
+}
+function addAppWrapper(appName,destFolder) {
+    dbWrapper.addApp(appName,destFolder);
 }
 
 // Returns an updated path, moving up one folder
